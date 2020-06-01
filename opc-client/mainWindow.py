@@ -27,8 +27,10 @@ class Ui_mainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
         self.refView = QtWidgets.QTableView(self.centralwidget)
+        self.refView.setEnabled(False)
         self.refView.setStyleSheet("border: 2px solid black;\n"
 "")
+        self.refView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.refView.setObjectName("refView")
         self.gridLayout.addWidget(self.refView, 9, 0, 1, 6)
         self.connectButton = QtWidgets.QPushButton(self.centralwidget)
@@ -55,6 +57,7 @@ class Ui_mainWindow(object):
         self.subView = QtWidgets.QTableView(self.centralwidget)
         self.subView.setStyleSheet("border: 2px solid black;\n"
 "")
+        self.subView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.subView.setObjectName("subView")
         self.gridLayout.addWidget(self.subView, 11, 0, 1, 6)
         self.connSettingsButton = QtWidgets.QPushButton(self.centralwidget)
@@ -74,6 +77,7 @@ class Ui_mainWindow(object):
         self.logTextEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.logTextEdit.setStyleSheet("border: 2px solid black;\n"
 "")
+        self.logTextEdit.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.logTextEdit.setObjectName("logTextEdit")
         self.gridLayout.addWidget(self.logTextEdit, 13, 0, 1, 6)
         self.addressComboBox = QtWidgets.QComboBox(self.centralwidget)
@@ -117,6 +121,7 @@ class Ui_mainWindow(object):
         self.attrView.setEnabled(True)
         self.attrView.setStyleSheet("border: 2px solid black;\n"
 "")
+        self.attrView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.attrView.setObjectName("attrView")
         self.gridLayout.addWidget(self.attrView, 3, 1, 4, 5)
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
@@ -140,6 +145,7 @@ class Ui_mainWindow(object):
         self.treeView = QtWidgets.QTreeView(self.centralwidget)
         self.treeView.setStyleSheet("border: 2px solid black;\n"
 "")
+        self.treeView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.treeView.setObjectName("treeView")
         self.gridLayout.addWidget(self.treeView, 3, 0, 5, 1)
         self.readButton = QtWidgets.QPushButton(self.centralwidget)
