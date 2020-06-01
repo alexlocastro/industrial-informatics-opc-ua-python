@@ -16,7 +16,6 @@ from opcua import Client, crypto, ua, Node
 from opcua.tools import endpoint_to_strings
 
 import sys
-import logging
 from datetime import datetime
 
 
@@ -116,8 +115,6 @@ class DataChangeUI(object):
 
 
 
-
-
 class ClientController:
 
     def __init__(self, view):
@@ -129,8 +126,8 @@ class ClientController:
         self.security_policy = None
         self.certificate_path = None
         self.private_key_path = None
+        self.ui.closeEvent = self.closeEvent
 
-        #self.ui.showMaximized()
         for addr in self.address_list:
             self.ui.addressComboBox.addItem(addr) 
         
@@ -144,11 +141,13 @@ class ClientController:
         self.ui.connSettingsButton.clicked.connect(lambda : self.show_connection_dialog())
         self.ui.connectButton.clicked.connect(lambda : self.connect())
         self.ui.disconnectButton.clicked.connect(lambda: self.disconnect())
-        self.ui.refAttrButton.clicked.connect(lambda sel: self.show_attrs(sel))
         self.ui.treeView.selectionModel().selectionChanged.connect(lambda sel: self.show_attrs(sel))
         self.ui.treeView.selectionModel().selectionChanged.connect(lambda sel: self.show_refs(sel))
         self.ui.readButton.clicked.connect(lambda : self.read_value())
         self.ui.writeButton.clicked.connect(lambda : self.show_write_dialog())
+    
+    def closeEvent(self, event):
+        self.disconnect()
 
     def get_endpoints(self):
         uri = self.ui.addressComboBox.currentText() 
@@ -252,12 +251,13 @@ class ClientController:
     def read_value(self):
         node = self.get_current_node()
         try:
-            value = node.get_value()
-            data = "Node: %s, Value: %s" % (node.get_browse_name(),value)
-            self.ui.logTextEdit.append(data)
+            self.attrs_ui.show_attrs(node)
+            if node.get_node_class() == ua.NodeClass.Variable:
+                value = node.get_value()
+                data = "Node: %s, Value: %s" % (node.get_browse_name(),value)
+                self.ui.logTextEdit.append(data)
         except Exception as ex:
             self.ui.logTextEdit.append(str(ex))
-
 
 
 class MainWindow(QMainWindow, Ui_mainWindow):

@@ -138,25 +138,6 @@ background-color: white;
      <string>Disconnect</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="refAttrButton">
-    <property name="geometry">
-     <rect>
-      <x>800</x>
-      <y>100</y>
-      <width>101</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton {
-	background-color: white;
-	border: 2px solid black;
-}</string>
-    </property>
-    <property name="text">
-     <string>Refresh</string>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="logTextEdit">
     <property name="geometry">
      <rect>
@@ -265,6 +246,9 @@ background-color: white;
     </property>
    </widget>
    <widget class="QTreeView" name="attrView">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>640</x>

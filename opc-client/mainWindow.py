@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -68,13 +68,6 @@ class Ui_mainWindow(object):
 "    border: 2px solid black;\n"
 "}")
         self.disconnectButton.setObjectName("disconnectButton")
-        self.refAttrButton = QtWidgets.QPushButton(self.centralwidget)
-        self.refAttrButton.setGeometry(QtCore.QRect(800, 100, 101, 31))
-        self.refAttrButton.setStyleSheet("QPushButton {\n"
-"    background-color: white;\n"
-"    border: 2px solid black;\n"
-"}")
-        self.refAttrButton.setObjectName("refAttrButton")
         self.logTextEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.logTextEdit.setGeometry(QtCore.QRect(70, 590, 861, 91))
         self.logTextEdit.setStyleSheet("border: 2px solid black;\n"
@@ -183,7 +176,6 @@ class Ui_mainWindow(object):
         self.label_2.setText(_translate("mainWindow", "Subscriptions"))
         self.unsubDataChangeButton.setText(_translate("mainWindow", "Unsubscribe"))
         self.disconnectButton.setText(_translate("mainWindow", "Disconnect"))
-        self.refAttrButton.setText(_translate("mainWindow", "Refresh"))
         self.connectButton.setText(_translate("mainWindow", "Connect"))
         self.connSettingsButton.setText(_translate("mainWindow", "Connection settings"))
         self.endpointsButton.setText(_translate("mainWindow", "Query Endopoints"))
