@@ -27,7 +27,7 @@ class Ui_mainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
         self.refView = QtWidgets.QTableView(self.centralwidget)
-        self.refView.setEnabled(False)
+        self.refView.setEnabled(True)
         self.refView.setStyleSheet("border: 2px solid black;\n"
 "")
         self.refView.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)

@@ -162,6 +162,8 @@ class ClientController:
 
     def show_connection_dialog(self):
         dia = ConnectionDialog(self, self.ui.addressComboBox.currentText())
+        print(self.security_mode)
+        print(self.security_policy)
         dia.security_mode = self.security_mode
         dia.security_policy = self.security_policy
         dia.certificate_path = self.certificate_path

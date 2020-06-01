@@ -12,15 +12,17 @@ class ConnectionDialog(QDialog):
 
         self.uaclient = parent
         self.uri = uri
-        #self.parent = parent
         
         self.ui.modeComboBox.addItem("None")
-        #self.ui.modeComboBox.addItem("Sign")
-        #self.ui.modeComboBox.addItem("SignAndEncrypt")
+        self.ui.modeComboBox.addItem("Sign")
+        self.ui.modeComboBox.addItem("SignAndEncrypt")
 
         self.ui.policyComboBox.addItem("None")
-        #self.ui.policyComboBox.addItem("Basic128Rsa15")
-        #self.ui.policyComboBox.addItem("Basic256")
+        self.ui.policyComboBox.addItem("Basic128Rsa15")
+        self.ui.policyComboBox.addItem("Basic256")
+        self.ui.policyComboBox.addItem("Basic256Sha256")
+
+
 
         self.ui.closeButton.clicked.connect(self.accept)
         self.ui.certificateButton.clicked.connect(self.get_certificate)
