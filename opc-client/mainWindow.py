@@ -24,62 +24,59 @@ class Ui_mainWindow(object):
 "")
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName("gridLayout")
         self.refView = QtWidgets.QTableView(self.centralwidget)
-        self.refView.setGeometry(QtCore.QRect(70, 320, 861, 89))
         self.refView.setStyleSheet("border: 2px solid black;\n"
 "")
         self.refView.setObjectName("refView")
-        self.subDataChangeButton = QtWidgets.QPushButton(self.centralwidget)
-        self.subDataChangeButton.setGeometry(QtCore.QRect(470, 230, 121, 31))
-        self.subDataChangeButton.setStyleSheet("QPushButton {\n"
+        self.gridLayout.addWidget(self.refView, 9, 0, 1, 6)
+        self.connectButton = QtWidgets.QPushButton(self.centralwidget)
+        self.connectButton.setStyleSheet("QPushButton {\n"
 "    background-color: white;\n"
 "    border: 2px solid black;\n"
 "}")
-        self.subDataChangeButton.setObjectName("subDataChangeButton")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(70, 290, 111, 21))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu Mono")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(70, 420, 141, 41))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu Mono")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
+        self.connectButton.setObjectName("connectButton")
+        self.gridLayout.addWidget(self.connectButton, 0, 4, 1, 1)
         self.unsubDataChangeButton = QtWidgets.QPushButton(self.centralwidget)
-        self.unsubDataChangeButton.setGeometry(QtCore.QRect(810, 420, 121, 31))
         self.unsubDataChangeButton.setStyleSheet("QPushButton {\n"
 "    background-color: white;\n"
 "    border: 2px solid black;\n"
 "}")
         self.unsubDataChangeButton.setObjectName("unsubDataChangeButton")
+        self.gridLayout.addWidget(self.unsubDataChangeButton, 10, 5, 1, 1)
+        self.endpointsButton = QtWidgets.QPushButton(self.centralwidget)
+        self.endpointsButton.setStyleSheet("QPushButton {\n"
+"    background-color: white;\n"
+"    border: 2px solid black;\n"
+"}")
+        self.endpointsButton.setObjectName("endpointsButton")
+        self.gridLayout.addWidget(self.endpointsButton, 0, 2, 1, 1)
+        self.subView = QtWidgets.QTableView(self.centralwidget)
+        self.subView.setStyleSheet("border: 2px solid black;\n"
+"")
+        self.subView.setObjectName("subView")
+        self.gridLayout.addWidget(self.subView, 11, 0, 1, 6)
+        self.connSettingsButton = QtWidgets.QPushButton(self.centralwidget)
+        self.connSettingsButton.setStyleSheet("QPushButton {\n"
+"    background-color: white;\n"
+"    border: 2px solid black;\n"
+"}")
+        self.connSettingsButton.setObjectName("connSettingsButton")
+        self.gridLayout.addWidget(self.connSettingsButton, 0, 1, 1, 1)
         self.disconnectButton = QtWidgets.QPushButton(self.centralwidget)
-        self.disconnectButton.setGeometry(QtCore.QRect(800, 30, 161, 41))
         self.disconnectButton.setStyleSheet("QPushButton {\n"
 "    background-color: white;\n"
 "    border: 2px solid black;\n"
 "}")
         self.disconnectButton.setObjectName("disconnectButton")
+        self.gridLayout.addWidget(self.disconnectButton, 0, 5, 1, 1)
         self.logTextEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.logTextEdit.setGeometry(QtCore.QRect(70, 590, 861, 91))
         self.logTextEdit.setStyleSheet("border: 2px solid black;\n"
 "")
         self.logTextEdit.setObjectName("logTextEdit")
-        self.subView = QtWidgets.QTableView(self.centralwidget)
-        self.subView.setGeometry(QtCore.QRect(70, 460, 861, 91))
-        self.subView.setStyleSheet("border: 2px solid black;\n"
-"")
-        self.subView.setObjectName("subView")
+        self.gridLayout.addWidget(self.logTextEdit, 13, 0, 1, 6)
         self.addressComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.addressComboBox.setGeometry(QtCore.QRect(80, 30, 341, 31))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -88,71 +85,8 @@ class Ui_mainWindow(object):
         self.addressComboBox.setStyleSheet("border: 2px solid black;")
         self.addressComboBox.setEditable(True)
         self.addressComboBox.setObjectName("addressComboBox")
-        self.connectButton = QtWidgets.QPushButton(self.centralwidget)
-        self.connectButton.setGeometry(QtCore.QRect(650, 30, 131, 41))
-        self.connectButton.setStyleSheet("QPushButton {\n"
-"    background-color: white;\n"
-"    border: 2px solid black;\n"
-"}")
-        self.connectButton.setObjectName("connectButton")
-        self.connSettingsButton = QtWidgets.QPushButton(self.centralwidget)
-        self.connSettingsButton.setGeometry(QtCore.QRect(440, 20, 191, 41))
-        self.connSettingsButton.setStyleSheet("QPushButton {\n"
-"    background-color: white;\n"
-"    border: 2px solid black;\n"
-"}")
-        self.connSettingsButton.setObjectName("connSettingsButton")
-        self.endpointsButton = QtWidgets.QPushButton(self.centralwidget)
-        self.endpointsButton.setGeometry(QtCore.QRect(440, 70, 191, 31))
-        self.endpointsButton.setStyleSheet("QPushButton {\n"
-"    background-color: white;\n"
-"    border: 2px solid black;\n"
-"}")
-        self.endpointsButton.setObjectName("endpointsButton")
-        self.attrView = QtWidgets.QTreeView(self.centralwidget)
-        self.attrView.setGeometry(QtCore.QRect(640, 140, 301, 131))
-        self.attrView.setStyleSheet("border: 2px solid black;\n"
-"")
-        self.attrView.setObjectName("attrView")
-        self.treeView = QtWidgets.QTreeView(self.centralwidget)
-        self.treeView.setGeometry(QtCore.QRect(70, 140, 391, 131))
-        self.treeView.setStyleSheet("border: 2px solid black;\n"
-"")
-        self.treeView.setObjectName("treeView")
-        self.writeButton = QtWidgets.QPushButton(self.centralwidget)
-        self.writeButton.setGeometry(QtCore.QRect(470, 190, 121, 31))
-        self.writeButton.setStyleSheet("QPushButton {\n"
-"    background-color: white;\n"
-"    border: 2px solid black;\n"
-"}")
-        self.writeButton.setObjectName("writeButton")
-        self.readButton = QtWidgets.QPushButton(self.centralwidget)
-        self.readButton.setGeometry(QtCore.QRect(470, 150, 121, 31))
-        self.readButton.setStyleSheet("QPushButton {\n"
-"    background-color: white;\n"
-"    border: 2px solid black;\n"
-"}")
-        self.readButton.setObjectName("readButton")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(640, 110, 111, 21))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu Mono")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_3.setFont(font)
-        self.label_3.setObjectName("label_3")
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(70, 110, 111, 21))
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu Mono")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_4.setFont(font)
-        self.label_4.setObjectName("label_4")
+        self.gridLayout.addWidget(self.addressComboBox, 0, 0, 1, 1)
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(70, 560, 141, 21))
         font = QtGui.QFont()
         font.setFamily("Ubuntu Mono")
         font.setPointSize(13)
@@ -160,6 +94,80 @@ class Ui_mainWindow(object):
         font.setWeight(75)
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
+        self.gridLayout.addWidget(self.label_5, 12, 0, 1, 1)
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setFamily("Ubuntu Mono")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.gridLayout.addWidget(self.label_2, 10, 0, 1, 1)
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setFamily("Ubuntu Mono")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName("label_4")
+        self.gridLayout.addWidget(self.label_4, 2, 0, 1, 1)
+        self.attrView = QtWidgets.QTreeView(self.centralwidget)
+        self.attrView.setEnabled(True)
+        self.attrView.setStyleSheet("border: 2px solid black;\n"
+"")
+        self.attrView.setObjectName("attrView")
+        self.gridLayout.addWidget(self.attrView, 3, 1, 4, 5)
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setFamily("Ubuntu Mono")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName("label_3")
+        self.gridLayout.addWidget(self.label_3, 2, 1, 1, 1)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setFamily("Ubuntu Mono")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setObjectName("label")
+        self.gridLayout.addWidget(self.label, 8, 0, 1, 1)
+        self.treeView = QtWidgets.QTreeView(self.centralwidget)
+        self.treeView.setStyleSheet("border: 2px solid black;\n"
+"")
+        self.treeView.setObjectName("treeView")
+        self.gridLayout.addWidget(self.treeView, 3, 0, 5, 1)
+        self.readButton = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.readButton.sizePolicy().hasHeightForWidth())
+        self.readButton.setSizePolicy(sizePolicy)
+        self.readButton.setStyleSheet("QPushButton {\n"
+"    background-color: white;\n"
+"    border: 2px solid black;\n"
+"}")
+        self.readButton.setObjectName("readButton")
+        self.gridLayout.addWidget(self.readButton, 7, 1, 1, 1)
+        self.writeButton = QtWidgets.QPushButton(self.centralwidget)
+        self.writeButton.setStyleSheet("QPushButton {\n"
+"    background-color: white;\n"
+"    border: 2px solid black;\n"
+"}")
+        self.writeButton.setObjectName("writeButton")
+        self.gridLayout.addWidget(self.writeButton, 7, 2, 1, 1)
+        self.subDataChangeButton = QtWidgets.QPushButton(self.centralwidget)
+        self.subDataChangeButton.setStyleSheet("QPushButton {\n"
+"    background-color: white;\n"
+"    border: 2px solid black;\n"
+"}")
+        self.subDataChangeButton.setObjectName("subDataChangeButton")
+        self.gridLayout.addWidget(self.subDataChangeButton, 7, 4, 1, 1)
         mainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -171,16 +179,16 @@ class Ui_mainWindow(object):
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
         mainWindow.setWindowTitle(_translate("mainWindow", "OPC UA Client"))
-        self.subDataChangeButton.setText(_translate("mainWindow", "Subscribe"))
-        self.label.setText(_translate("mainWindow", "References"))
-        self.label_2.setText(_translate("mainWindow", "Subscriptions"))
-        self.unsubDataChangeButton.setText(_translate("mainWindow", "Unsubscribe"))
-        self.disconnectButton.setText(_translate("mainWindow", "Disconnect"))
         self.connectButton.setText(_translate("mainWindow", "Connect"))
-        self.connSettingsButton.setText(_translate("mainWindow", "Connection settings"))
+        self.unsubDataChangeButton.setText(_translate("mainWindow", "Unsubscribe"))
         self.endpointsButton.setText(_translate("mainWindow", "Query Endopoints"))
-        self.writeButton.setText(_translate("mainWindow", "Write"))
-        self.readButton.setText(_translate("mainWindow", "Read"))
-        self.label_3.setText(_translate("mainWindow", "Details"))
-        self.label_4.setText(_translate("mainWindow", "Browse"))
+        self.connSettingsButton.setText(_translate("mainWindow", "Connection settings"))
+        self.disconnectButton.setText(_translate("mainWindow", "Disconnect"))
         self.label_5.setText(_translate("mainWindow", "Log"))
+        self.label_2.setText(_translate("mainWindow", "Subscriptions"))
+        self.label_4.setText(_translate("mainWindow", "Browse"))
+        self.label_3.setText(_translate("mainWindow", "Details"))
+        self.label.setText(_translate("mainWindow", "References"))
+        self.readButton.setText(_translate("mainWindow", "Read"))
+        self.writeButton.setText(_translate("mainWindow", "Write"))
+        self.subDataChangeButton.setText(_translate("mainWindow", "Subscribe"))
