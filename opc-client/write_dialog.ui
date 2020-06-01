@@ -6,47 +6,87 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>346</width>
+    <height>109</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Write value</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+	background-color:white;
+}</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>10</x>
      <y>20</y>
      <width>121</width>
-     <height>17</height>
+     <height>20</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu Mono</family>
+     <pointsize>13</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="text">
-    <string>insert value:</string>
+    <string>Value</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="writeValue">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>80</y>
-     <width>151</width>
+     <x>80</x>
+     <y>20</y>
+     <width>241</width>
      <height>25</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+	border: 2px solid black;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="writeButton">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>170</y>
+     <x>120</x>
+     <y>70</y>
      <width>89</width>
      <height>25</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: white;
+	border: 2px solid black;
+}</string>
+   </property>
    <property name="text">
-    <string>write</string>
+    <string>Write</string>
    </property>
   </widget>
  </widget>
