@@ -1,6 +1,7 @@
 from opcua import Server, ua
 from gpiozero import Button, LED
 import time
+import threading
 
 #Creates an instance of our OPC UA server
 server = Server()
@@ -43,12 +44,17 @@ print(f"Server started at {url}")
 button = Button(21)
 led = LED(17)
 
+ledLock = threading.Lock()
+buttonLock = threading.Lock()
+
 try:
     #Loop that updates the button varible status and toggles the led
     #based on the OPC ledVariable 
     while True:
-        buttonVariable.set_value(1 if button.is_pressed else 0)
-        ledValue = ledVariable.get_value()
+        with buttonLock:
+            buttonVariable.set_value(1 if button.is_pressed else 0)
+        with ledLock:
+            ledValue = ledVariable.get_value()
         if ledValue:
             led.on()
         else:
