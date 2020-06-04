@@ -273,7 +273,7 @@ background-color: white;
      </widget>
     </item>
     <item row="13" column="4">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="deleteSubButton">
       <property name="styleSheet">
        <string notr="true">QPushButton {
 	background-color: white;

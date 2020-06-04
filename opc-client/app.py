@@ -1,6 +1,7 @@
 from connection_dialog import ConnectionDialog
 from subscription_dialog import SubscriptionDialog
 from monitored_item_dialog import MonitoredItemDialog
+from delete_sub_dialog import DeleteSubDialog
 from write import WriteDialog
 
 from mainWindow import Ui_mainWindow
@@ -40,8 +41,8 @@ class DataChangeUI(object):
         self._subhandler = DataChangeHandler()
         self._subscribed_nodes = []
         #self._datachange_sub = None
-        self._datachange_sub = {}
-        self._subs_dc = {}
+        self._datachange_sub = {} #key: subscriptionId, value: subscription class
+        self._subs_dc = {} #key: nodeId, value: (handler,subscriptionId)
         self.model = QStandardItemModel()
         self.monitored_item_model = QStandardItemModel()
         self.window.ui.subView.setModel(self.model)
@@ -60,6 +61,7 @@ class DataChangeUI(object):
         self.window.ui.createSubButton.clicked.connect(lambda: self.show_sub_dialog())
         self.window.ui.subDataChangeButton.clicked.connect(lambda: self.show_monitored_item_dialog())
         self.window.ui.unsubDataChangeButton.clicked.connect(lambda: self._unsubscribe())
+        self.window.ui.deleteSubButton.clicked.connect(lambda: self.show_delete_sub_dialog())
 
         # handle subscriptions
         self._subhandler.data_change_fired.connect(self._update_subscription_model, type=Qt.QueuedConnection)
@@ -71,6 +73,10 @@ class DataChangeUI(object):
     
     def show_monitored_item_dialog(self):
         dia = MonitoredItemDialog(self)
+        dia.exec_()
+    
+    def show_delete_sub_dialog(self):
+        dia = DeleteSubDialog(self)
         dia.exec_()
 
     def clear(self):
@@ -85,7 +91,8 @@ class DataChangeUI(object):
             self._datachange_sub[sub.subscription_id] = sub
             self.model.setHorizontalHeaderLabels(["Subscription Id", "Publishing Interval"])
             row = [QStandardItem(str(sub.subscription_id)), QStandardItem(str(sub.parameters.RequestedPublishingInterval))]
-            self.model.appendRow(row)
+            row[0].setData(sub)
+            self.model.appendRow(row)         
         except Exception as ex:
             self.window.ui.logTextEdit.append(str(ex))
             #modelidx = self.model.indexFromItem(row[0])
@@ -124,13 +131,16 @@ class DataChangeUI(object):
             idx = self.monitored_item_model.indexFromItem(row[0])
             self.monitored_item_model.takeRow(idx.row())
 
-    def _unsubscribe(self):
-        node = self.window.get_current_node()
+    def _unsubscribe(self, node=None):
+        if node is None:
+            node = self.window.get_current_node()
         if node is None:
             return
         sub_id = self._subs_dc[node.nodeid][1]
         handle = self._subs_dc[node.nodeid][0]
         self._datachange_sub[sub_id].unsubscribe(handle)
+        print("unsubscribed node")
+        print(node)
         self._subscribed_nodes.remove(node)
         i = 0
         while self.monitored_item_model.item(i):
@@ -149,6 +159,38 @@ class DataChangeUI(object):
                 it_ts = self.monitored_item_model.item(i, 2)
                 it_ts.setText(timestamp)
             i += 1
+
+    def delete_subscription(self, subscription_id):
+
+        for k,v in self._subs_dc.items():
+            if v[1] == subscription_id:
+                print(k)
+                print(v[1])
+                node = self.get_node(k)
+                print(node)
+                self._unsubscribe(node = node)
+
+        sub = self._datachange_sub[subscription_id].delete()
+        self._datachange_sub.pop(subscription_id)
+        i = 0
+        while self.model.item(i):
+            item = self.model.item(i)
+            if item.data().subscription_id == subscription_id:
+                self.model.removeRow(i)
+            i += 1
+    
+    def get_node(self,node_id):
+        print(self._subscribed_nodes)
+        for node in self._subscribed_nodes:
+            print(node.nodeid)
+            print(node_id)
+            if node.nodeid == node_id:
+                print("equal")
+                return node
+            continue
+
+
+
 
 
 

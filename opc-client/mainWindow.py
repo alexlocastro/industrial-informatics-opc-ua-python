@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -165,13 +165,13 @@ class Ui_mainWindow(object):
         self.logTextEdit.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.logTextEdit.setObjectName("logTextEdit")
         self.gridLayout.addWidget(self.logTextEdit, 17, 0, 1, 6)
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setStyleSheet("QPushButton {\n"
+        self.deleteSubButton = QtWidgets.QPushButton(self.centralwidget)
+        self.deleteSubButton.setStyleSheet("QPushButton {\n"
 "    background-color: white;\n"
 "    border: 2px solid black;\n"
 "}")
-        self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 13, 4, 1, 1)
+        self.deleteSubButton.setObjectName("deleteSubButton")
+        self.gridLayout.addWidget(self.deleteSubButton, 13, 4, 1, 1)
         self.createSubButton = QtWidgets.QPushButton(self.centralwidget)
         self.createSubButton.setStyleSheet("QPushButton {\n"
 "    background-color: white;\n"
@@ -215,7 +215,7 @@ class Ui_mainWindow(object):
         self.label_2.setText(_translate("mainWindow", "Subscriptions"))
         self.endpointsButton.setText(_translate("mainWindow", "Query Endopoints"))
         self.label.setText(_translate("mainWindow", "References"))
-        self.pushButton.setText(_translate("mainWindow", "Delete subscription"))
+        self.deleteSubButton.setText(_translate("mainWindow", "Delete subscription"))
         self.createSubButton.setText(_translate("mainWindow", "Create Subscription"))
         self.connectButton.setText(_translate("mainWindow", "Connect"))
         self.disconnectButton.setText(_translate("mainWindow", "Disconnect"))
