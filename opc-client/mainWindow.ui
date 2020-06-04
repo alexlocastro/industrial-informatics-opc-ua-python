@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1005</width>
+    <width>927</width>
     <height>734</height>
    </rect>
   </property>
@@ -26,30 +26,18 @@ background-color: white;
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="9" column="0" colspan="6">
-     <widget class="QTableView" name="refView">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 2px solid black;
-</string>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="4">
-     <widget class="QPushButton" name="connectButton">
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-	background-color: white;
-	border: 2px solid black;
-}</string>
+    <item row="2" column="1">
+     <widget class="QLabel" name="label_3">
+      <property name="font">
+       <font>
+        <family>Ubuntu Mono</family>
+        <pointsize>13</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
-       <string>Connect</string>
+       <string>Details</string>
       </property>
      </widget>
     </item>
@@ -79,8 +67,53 @@ background-color: white;
       </property>
      </widget>
     </item>
-    <item row="11" column="0" colspan="6">
-     <widget class="QTableView" name="subView">
+    <item row="0" column="0">
+     <widget class="QComboBox" name="addressComboBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 2px solid black;</string>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="font">
+       <font>
+        <family>Ubuntu Mono</family>
+        <pointsize>13</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Browse</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="0" colspan="6">
+     <widget class="QTextEdit" name="logTextEdit">
+      <property name="styleSheet">
+       <string notr="true">border: 2px solid black;
+</string>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0" colspan="6">
+     <widget class="QTableView" name="refView">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="styleSheet">
        <string notr="true">border: 2px solid black;
 </string>
@@ -100,46 +133,6 @@ background-color: white;
       </property>
       <property name="text">
        <string>Connection settings</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="5">
-     <widget class="QPushButton" name="disconnectButton">
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-	background-color: white;
-	border: 2px solid black;
-}</string>
-      </property>
-      <property name="text">
-       <string>Disconnect</string>
-      </property>
-     </widget>
-    </item>
-    <item row="13" column="0" colspan="6">
-     <widget class="QTextEdit" name="logTextEdit">
-      <property name="styleSheet">
-       <string notr="true">border: 2px solid black;
-</string>
-      </property>
-      <property name="textInteractionFlags">
-       <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QComboBox" name="addressComboBox">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 2px solid black;</string>
-      </property>
-      <property name="editable">
-       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -173,73 +166,29 @@ background-color: white;
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="font">
-       <font>
-        <family>Ubuntu Mono</family>
-        <pointsize>13</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Browse</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1" rowspan="4" colspan="5">
-     <widget class="QTreeView" name="attrView">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
+    <item row="7" column="2">
+     <widget class="QPushButton" name="writeButton">
       <property name="styleSheet">
-       <string notr="true">border: 2px solid black;
-</string>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLabel" name="label_3">
-      <property name="font">
-       <font>
-        <family>Ubuntu Mono</family>
-        <pointsize>13</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
+       <string notr="true">QPushButton {
+	background-color: white;
+	border: 2px solid black;
+}</string>
       </property>
       <property name="text">
-       <string>Details</string>
+       <string>Write</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="label">
-      <property name="font">
-       <font>
-        <family>Ubuntu Mono</family>
-        <pointsize>13</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>References</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" rowspan="5">
-     <widget class="QTreeView" name="treeView">
+    <item row="10" column="4">
+     <widget class="QPushButton" name="subDataChangeButton">
       <property name="styleSheet">
-       <string notr="true">border: 2px solid black;
-</string>
+       <string notr="true">QPushButton {
+	background-color: white;
+	border: 2px solid black;
+}</string>
       </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
+      <property name="text">
+       <string>Subscribe</string>
       </property>
      </widget>
     </item>
@@ -262,21 +211,19 @@ background-color: white;
       </property>
      </widget>
     </item>
-    <item row="7" column="2">
-     <widget class="QPushButton" name="writeButton">
+    <item row="3" column="0" rowspan="5">
+     <widget class="QTreeView" name="treeView">
       <property name="styleSheet">
-       <string notr="true">QPushButton {
-	background-color: white;
-	border: 2px solid black;
-}</string>
+       <string notr="true">border: 2px solid black;
+</string>
       </property>
-      <property name="text">
-       <string>Write</string>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
       </property>
      </widget>
     </item>
-    <item row="7" column="4">
-     <widget class="QPushButton" name="subDataChangeButton">
+    <item row="0" column="5">
+     <widget class="QPushButton" name="disconnectButton">
       <property name="styleSheet">
        <string notr="true">QPushButton {
 	background-color: white;
@@ -284,7 +231,74 @@ background-color: white;
 }</string>
       </property>
       <property name="text">
-       <string>Subscribe</string>
+       <string>Disconnect</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" rowspan="4" colspan="5">
+     <widget class="QTreeView" name="attrView">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 2px solid black;
+</string>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QTableView" name="subView">
+      <property name="styleSheet">
+       <string notr="true">border: 2px solid black;
+</string>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="2">
+     <widget class="QPushButton" name="createSubButton">
+      <property name="text">
+       <string>Create Subscription</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>Ubuntu Mono</family>
+        <pointsize>13</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>References</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="4">
+     <widget class="QPushButton" name="connectButton">
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	background-color: white;
+	border: 2px solid black;
+}</string>
+      </property>
+      <property name="text">
+       <string>Connect</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1" colspan="5">
+     <widget class="QTableView" name="monItemView">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
       </property>
      </widget>
     </item>

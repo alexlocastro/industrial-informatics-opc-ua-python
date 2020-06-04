@@ -49,72 +49,17 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>13</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Queue Size</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="queueSize">
-     <property name="styleSheet">
-      <string notr="true">QLineEdit {
-	border: 2px solid black;
-	margin-left: 80px;
-	margin-right: 80px;
-}</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label_3">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>13</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Absolute  deadband</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="absoluteDeadBand">
-     <property name="styleSheet">
-      <string notr="true">QLineEdit {
-	border: 2px solid black;
-	margin-left: 80px;
-	margin-right: 80px;
-}</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>60</height>
       </size>
      </property>
     </spacer>

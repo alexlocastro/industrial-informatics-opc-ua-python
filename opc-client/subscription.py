@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'subscription.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -37,43 +37,7 @@ class Ui_Dialog(object):
 "}")
         self.pubInterval.setObjectName("pubInterval")
         self.verticalLayout.addWidget(self.pubInterval)
-        self.label_2 = QtWidgets.QLabel(Dialog)
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu Mono")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_2.setFont(font)
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout.addWidget(self.label_2)
-        self.queueSize = QtWidgets.QLineEdit(Dialog)
-        self.queueSize.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid black;\n"
-"    margin-left: 80px;\n"
-"    margin-right: 80px;\n"
-"}")
-        self.queueSize.setObjectName("queueSize")
-        self.verticalLayout.addWidget(self.queueSize)
-        self.label_3 = QtWidgets.QLabel(Dialog)
-        font = QtGui.QFont()
-        font.setFamily("Ubuntu Mono")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_3.setFont(font)
-        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_3.setObjectName("label_3")
-        self.verticalLayout.addWidget(self.label_3)
-        self.absoluteDeadBand = QtWidgets.QLineEdit(Dialog)
-        self.absoluteDeadBand.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid black;\n"
-"    margin-left: 80px;\n"
-"    margin-right: 80px;\n"
-"}")
-        self.absoluteDeadBand.setObjectName("absoluteDeadBand")
-        self.verticalLayout.addWidget(self.absoluteDeadBand)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(20, 60, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout.addItem(spacerItem)
         self.subButton = QtWidgets.QPushButton(Dialog)
         font = QtGui.QFont()
@@ -96,6 +60,4 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Subscribe"))
         self.label.setText(_translate("Dialog", "Publishing Interval (ms)"))
-        self.label_2.setText(_translate("Dialog", "Queue Size"))
-        self.label_3.setText(_translate("Dialog", "Absolute  deadband"))
         self.subButton.setText(_translate("Dialog", "Subscribe"))

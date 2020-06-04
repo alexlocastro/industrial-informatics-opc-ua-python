@@ -1,5 +1,6 @@
 from connection_dialog import ConnectionDialog
 from subscription_dialog import SubscriptionDialog
+from monitored_item_dialog import MonitoredItemDialog
 from write import WriteDialog
 
 from mainWindow import Ui_mainWindow
@@ -38,16 +39,26 @@ class DataChangeUI(object):
         self.window = window
         self._subhandler = DataChangeHandler()
         self._subscribed_nodes = []
-        self._datachange_sub = None
+        #self._datachange_sub = None
+        self._datachange_sub = {}
         self._subs_dc = {}
         self.model = QStandardItemModel()
+        self.monitored_item_model = QStandardItemModel()
         self.window.ui.subView.setModel(self.model)
         self.window.ui.subView.horizontalHeader().setSectionResizeMode(1)
-        self.pub_interval = 500
-        self.queue_size = 1
-        self.abs_deadband = 0
+        self.window.ui.monItemView.setModel(self.monitored_item_model)
+        self.window.ui.monItemView.horizontalHeader().setSectionResizeMode(1)
         
-        self.window.ui.subDataChangeButton.clicked.connect(lambda: self.show_sub_dialog())
+        self.pub_interval = 500
+        self.subscription_id = None
+        self.sampling_interval = 500
+        self.queue_size = 1
+        self.deadband_value = 0
+        self.discard_oldest = True
+        self.deadband_type = 1 #Absolute
+        
+        self.window.ui.createSubButton.clicked.connect(lambda: self.show_sub_dialog())
+        self.window.ui.subDataChangeButton.clicked.connect(lambda: self.show_monitored_item_dialog())
         self.window.ui.unsubDataChangeButton.clicked.connect(lambda: self._unsubscribe())
 
         # handle subscriptions
@@ -57,59 +68,85 @@ class DataChangeUI(object):
     def show_sub_dialog(self):
         dia = SubscriptionDialog(self)
         dia.exec_()
+    
+    def show_monitored_item_dialog(self):
+        dia = MonitoredItemDialog(self)
+        dia.exec_()
 
     def clear(self):
         self._subscribed_nodes = []
         self.model.clear()
+        self.monitored_item_model.clear()
 
-    def _subscribe(self, node=None):
+    def create_subscription(self):
+        try:
+            #if not self._datachange_sub:
+            sub = self.window.client.create_subscription(self.pub_interval, self._subhandler)
+            self._datachange_sub[sub.subscription_id] = sub
+            self.model.setHorizontalHeaderLabels(["Subscription Id", "Publishing Interval"])
+            row = [QStandardItem(str(sub.subscription_id)), QStandardItem(str(sub.parameters.RequestedPublishingInterval))]
+            self.model.appendRow(row)
+        except Exception as ex:
+            self.window.ui.logTextEdit.append(str(ex))
+            #modelidx = self.model.indexFromItem(row[0])
+            #self.model.takeRow(idx.row())
+    
+    def _subscribe(self, node = None):
         if not isinstance(node, Node):
             node = self.window.get_current_node()
             if node is None:
-                return
+                    return
+        if node.get_node_class() != ua.NodeClass.Variable:
+            self.window.ui.logTextEdit.append("Select a variable node")
+            return
         if node in self._subscribed_nodes:
             self.window.ui.logTextEdit.append("already subscribed to node: %s " % node)
             return
-        self.model.setHorizontalHeaderLabels(["DisplayName", "Value", "Timestamp"])
+        self.monitored_item_model.setHorizontalHeaderLabels(["DisplayName", "Value", "Timestamp","Subscription Id"])
         text = str(node.get_display_name().Text)
-        row = [QStandardItem(text), QStandardItem("No Data yet"), QStandardItem("")]
+        row = [QStandardItem(text), QStandardItem("No Data yet"), QStandardItem(""), QStandardItem(str(self.subscription_id))]
         row[0].setData(node)
-        self.model.appendRow(row)
+        self.monitored_item_model.appendRow(row)
         self._subscribed_nodes.append(node)
-        
         try:
-            if not self._datachange_sub:
-                self._datachange_sub = self.window.client.create_subscription(self.pub_interval, self._subhandler)
-            #handle = self._datachange_sub.subscribe_data_change(node,queuesize=self.queue_size)
-            handle = self._datachange_sub.deadband_monitor(node,self.abs_deadband,queuesize=self.queue_size ) 
-            self._subs_dc[node.nodeid] = handle
-            
+            mir = self._datachange_sub[self.subscription_id]._make_monitored_item_request(node,ua.AttributeIds.Value, None, self.queue_size) #mfilter, queue size
+            mir.RequestedParameters.DiscardOldest = self.discard_oldest
+            mir.RequestedParameters.SamplingInterval= self.sampling_interval
+            mod_filter = ua.DataChangeFilter()
+            mod_filter.Trigger = ua.DataChangeTrigger(1)  # send notification when status or value change
+            mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
+            mod_filter.DeadbandValue =  self.deadband_value
+            mir.RequestedParameters.Filter = mod_filter
+            handle = self._datachange_sub[self.subscription_id].create_monitored_items([mir]) 
+            self._subs_dc[node.nodeid] = (handle[0], self.subscription_id)
         except Exception as ex:
             self.window.ui.logTextEdit.append(str(ex))
-            idx = self.model.indexFromItem(row[0])
-            self.model.takeRow(idx.row())
+            idx = self.monitored_item_model.indexFromItem(row[0])
+            self.monitored_item_model.takeRow(idx.row())
 
     def _unsubscribe(self):
         node = self.window.get_current_node()
         if node is None:
             return
-        self._datachange_sub.unsubscribe(self._subs_dc[node.nodeid])
+        sub_id = self._subs_dc[node.nodeid][1]
+        handle = self._subs_dc[node.nodeid][0]
+        self._datachange_sub[sub_id].unsubscribe(handle)
         self._subscribed_nodes.remove(node)
         i = 0
-        while self.model.item(i):
-            item = self.model.item(i)
+        while self.monitored_item_model.item(i):
+            item = self.monitored_item_model.item(i)
             if item.data() == node:
-                self.model.removeRow(i)
+                self.monitored_item_model.removeRow(i)
             i += 1
 
     def _update_subscription_model(self, node, value, timestamp):
         i = 0
-        while self.model.item(i):
-            item = self.model.item(i)
+        while self.monitored_item_model.item(i):
+            item = self.monitored_item_model.item(i)
             if item.data() == node:
-                it = self.model.item(i, 1)
+                it = self.monitored_item_model.item(i, 1)
                 it.setText(value)
-                it_ts = self.model.item(i, 2)
+                it_ts = self.monitored_item_model.item(i, 2)
                 it_ts.setText(timestamp)
             i += 1
 
