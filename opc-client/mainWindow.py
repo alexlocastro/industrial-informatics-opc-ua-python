@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.3
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -213,7 +213,7 @@ class Ui_mainWindow(object):
         self.writeButton.setText(_translate("mainWindow", "Write"))
         self.subDataChangeButton.setText(_translate("mainWindow", "Add monitored item"))
         self.label_2.setText(_translate("mainWindow", "Subscriptions"))
-        self.endpointsButton.setText(_translate("mainWindow", "Query Endopoints"))
+        self.endpointsButton.setText(_translate("mainWindow", "Query Endpoints"))
         self.label.setText(_translate("mainWindow", "References"))
         self.deleteSubButton.setText(_translate("mainWindow", "Delete subscription"))
         self.createSubButton.setText(_translate("mainWindow", "Create Subscription"))

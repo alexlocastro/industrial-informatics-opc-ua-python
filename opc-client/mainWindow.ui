@@ -242,7 +242,7 @@ background-color: white;
 }</string>
       </property>
       <property name="text">
-       <string>Query Endopoints</string>
+       <string>Query Endpoints</string>
       </property>
      </widget>
     </item>
