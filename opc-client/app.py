@@ -95,6 +95,7 @@ class DataChangeUI(object):
             self.model.appendRow(row)         
         except Exception as ex:
             self.window.ui.logTextEdit.append(str(ex))
+            raise
             #modelidx = self.model.indexFromItem(row[0])
             #self.model.takeRow(idx.row())
     
@@ -139,8 +140,6 @@ class DataChangeUI(object):
         sub_id = self._subs_dc[node.nodeid][1]
         handle = self._subs_dc[node.nodeid][0]
         self._datachange_sub[sub_id].unsubscribe(handle)
-        print("unsubscribed node")
-        print(node)
         self._subscribed_nodes.remove(node)
         i = 0
         while self.monitored_item_model.item(i):
@@ -161,14 +160,11 @@ class DataChangeUI(object):
             i += 1
 
     def delete_subscription(self, subscription_id):
-
         for k,v in self._subs_dc.items():
             if v[1] == subscription_id:
-                print(k)
-                print(v[1])
                 node = self.get_node(k)
-                print(node)
-                self._unsubscribe(node = node)
+                if node is not None:
+                    self._unsubscribe(node = node)
 
         sub = self._datachange_sub[subscription_id].delete()
         self._datachange_sub.pop(subscription_id)
@@ -180,14 +176,12 @@ class DataChangeUI(object):
             i += 1
     
     def get_node(self,node_id):
-        print(self._subscribed_nodes)
         for node in self._subscribed_nodes:
-            print(node.nodeid)
-            print(node_id)
-            if node.nodeid == node_id:
-                print("equal")
-                return node
-            continue
+            if node != None:
+                if node.nodeid == node_id:
+                    return node
+        return None
+    
 
 
 
@@ -289,7 +283,7 @@ class ClientController:
     def _reset(self):
         self.client = None
         self._connected = False
-        self.datachange_ui._datachange_sub = None
+        self.datachange_ui._datachange_sub = {}
         self.datachange_ui._subs_dc = {}
     
     def disconnect(self):
