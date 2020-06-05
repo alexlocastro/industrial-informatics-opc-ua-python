@@ -145,6 +145,32 @@
      </property>
     </spacer>
    </item>
+   <item alignment="Qt::AlignHCenter">
+    <widget class="QCheckBox" name="absDeadbandBox">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Absolute DeadBand</string>
+     </property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignHCenter">
+    <widget class="QCheckBox" name="percentageDeadbandBox">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Relative DeadBand</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="QLabel" name="label_2">
      <property name="font">
@@ -171,42 +197,6 @@
 	margin-left: 80px;
 	margin-right: 80px;
 }</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QRadioButton" name="percentageDeadbandButton">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">margin-left:70</string>
-     </property>
-     <property name="text">
-      <string>Relative Deadband</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QRadioButton" name="absDeadbandButton">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">margin-left:70</string>
-     </property>
-     <property name="text">
-      <string>Absolute Deadband</string>
      </property>
     </widget>
    </item>

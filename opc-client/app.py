@@ -56,7 +56,7 @@ class DataChangeUI(object):
         self.queue_size = 1
         self.deadband_value = 0
         self.discard_oldest = True
-        self.deadband_type = 1 #Absolute
+        self.deadband_type = None
         
         self.window.ui.createSubButton.clicked.connect(lambda: self.show_sub_dialog())
         self.window.ui.subDataChangeButton.clicked.connect(lambda: self.show_monitored_item_dialog())
@@ -122,8 +122,9 @@ class DataChangeUI(object):
             mir.RequestedParameters.SamplingInterval= self.sampling_interval
             mod_filter = ua.DataChangeFilter()
             mod_filter.Trigger = ua.DataChangeTrigger(1)  # send notification when status or value change
-            mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
-            mod_filter.DeadbandValue =  self.deadband_value
+            if self.deadband_type != None:
+                mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
+                mod_filter.DeadbandValue =  self.deadband_value
             mir.RequestedParameters.Filter = mod_filter
             handle = self._datachange_sub[self.subscription_id].create_monitored_items([mir]) 
             self._subs_dc[node.nodeid] = (handle[0], self.subscription_id)
