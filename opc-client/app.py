@@ -132,7 +132,13 @@ class DataChangeUI(object):
             mod_filter = ua.DataChangeFilter()
             mod_filter.Trigger = ua.DataChangeTrigger(1)  # send notification when status or value change
             if self.deadband_type != None:
-                if self.deadband_type == 2 and node.get_type_definition().Identifier == ua.object_ids.ObjectIds.AnalogItemType:
+                if self.deadband_type == 1:
+                    if node.get_data_type_as_variant_type() in self.numeric_types:           
+                        mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
+                        mod_filter.DeadbandValue =  self.deadband_value
+                    else:
+                        self.window.ui.logTextEdit.append("filter must be used for numeric data type")
+                elif self.deadband_type == 2 and node.get_type_definition().Identifier == ua.object_ids.ObjectIds.AnalogItemType:
                     if node.get_data_type_as_variant_type() in self.numeric_types:           
                         mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
                         mod_filter.DeadbandValue =  self.deadband_value
