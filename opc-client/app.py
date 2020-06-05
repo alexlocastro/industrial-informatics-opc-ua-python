@@ -19,7 +19,7 @@ from opcua.tools import endpoint_to_strings
 
 import sys
 from datetime import datetime
-
+import time
 
 class DataChangeHandler(QObject):
     data_change_fired = pyqtSignal(object, str, str)
@@ -182,12 +182,6 @@ class DataChangeUI(object):
                     return node
         return None
     
-
-
-
-
-
-
 class ClientController:
 
     def __init__(self, view):
@@ -263,6 +257,7 @@ class ClientController:
         self.ui.logTextEdit.append("Connecting to %s with parameters %s, %s, %s, %s" % (uri, self.security_mode, self.security_policy, self.certificate_path, self.private_key_path))
         try:
             self.client = Client(uri)
+            self.client.application_uri = "urn:opcua:python:client"
             if self.security_mode is not None and self.security_policy is not None:
                 self.client.set_security(
                     getattr(crypto.security_policies, 'SecurityPolicy' + self.security_policy),
@@ -274,12 +269,14 @@ class ClientController:
             self._connected = True
         except Exception as ex:
             self.ui.logTextEdit.append(str(ex))
+        try:
+            self.client.uaclient._uasocket._thread.isAlive()
+            self.tree_ui.set_root_node(self.client.get_root_node())
+            self.ui.treeView.setFocus()
+        except Exception as ex:
+            print("Connection error")
 
-        self.tree_ui.set_root_node(self.client.get_root_node())
-        self.ui.treeView.setFocus()
 
-
-    
     def _reset(self):
         self.client = None
         self._connected = False
