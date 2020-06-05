@@ -66,6 +66,15 @@ class DataChangeUI(object):
         # handle subscriptions
         self._subhandler.data_change_fired.connect(self._update_subscription_model, type=Qt.QueuedConnection)
         
+        self.numeric_types = [  ua.uatypes.VariantType.Int16,
+                                ua.uatypes.VariantType.UInt16,
+                                ua.uatypes.VariantType.Int32,
+                                ua.uatypes.VariantType.UInt32,
+                                ua.uatypes.VariantType.Int64,
+                                ua.uatypes.VariantType.UInt64,
+                                ua.uatypes.VariantType.Float,
+                                ua.uatypes.VariantType.Double
+                            ]
     
     def show_sub_dialog(self):
         dia = SubscriptionDialog(self)
@@ -123,31 +132,42 @@ class DataChangeUI(object):
             mod_filter = ua.DataChangeFilter()
             mod_filter.Trigger = ua.DataChangeTrigger(1)  # send notification when status or value change
             if self.deadband_type != None:
-                mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
-                mod_filter.DeadbandValue =  self.deadband_value
+                if self.deadband_type == 2 and node.get_type_definition().Identifier == ua.object_ids.ObjectIds.AnalogItemType:
+                    if node.get_data_type_as_variant_type() in self.numeric_types:           
+                        mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
+                        mod_filter.DeadbandValue =  self.deadband_value
+                    else:
+                        self.window.ui.logTextEdit.append("filter must be used for numeric data type")
+                else:
+                    self.window.ui.logTextEdit.append("percentage deadband must be applied to AnalagoItemType with EUrange")
+
             mir.RequestedParameters.Filter = mod_filter
             handle = self._datachange_sub[self.subscription_id].create_monitored_items([mir]) 
             self._subs_dc[node.nodeid] = (handle[0], self.subscription_id)
         except Exception as ex:
+            print("exception")
             self.window.ui.logTextEdit.append(str(ex))
             idx = self.monitored_item_model.indexFromItem(row[0])
             self.monitored_item_model.takeRow(idx.row())
 
     def _unsubscribe(self, node=None):
-        if node is None:
-            node = self.window.get_current_node()
-        if node is None:
-            return
-        sub_id = self._subs_dc[node.nodeid][1]
-        handle = self._subs_dc[node.nodeid][0]
-        self._datachange_sub[sub_id].unsubscribe(handle)
-        self._subscribed_nodes.remove(node)
-        i = 0
-        while self.monitored_item_model.item(i):
-            item = self.monitored_item_model.item(i)
-            if item.data() == node:
-                self.monitored_item_model.removeRow(i)
-            i += 1
+        try:
+            if node is None:
+                node = self.window.get_current_node()
+            if node is None:
+                return
+            sub_id = self._subs_dc[node.nodeid][1]
+            handle = self._subs_dc[node.nodeid][0]
+            self._datachange_sub[sub_id].unsubscribe(handle)
+            self._subscribed_nodes.remove(node)
+            i = 0
+            while self.monitored_item_model.item(i):
+                item = self.monitored_item_model.item(i)
+                if item.data() == node:
+                    self.monitored_item_model.removeRow(i)
+                i += 1
+        except Exception as ex:
+            self.window.ui.logTextEdit.append(str(ex))
 
     def _update_subscription_model(self, node, value, timestamp):
         i = 0
