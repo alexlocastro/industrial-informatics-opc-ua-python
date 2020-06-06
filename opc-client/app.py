@@ -151,7 +151,6 @@ class DataChangeUI(object):
             handle = self._datachange_sub[self.subscription_id].create_monitored_items([mir]) 
             self._subs_dc[node.nodeid] = (handle[0], self.subscription_id)
         except Exception as ex:
-            print("exception")
             self.window.ui.logTextEdit.append(str(ex))
             idx = self.monitored_item_model.indexFromItem(row[0])
             self.monitored_item_model.takeRow(idx.row())
@@ -187,20 +186,23 @@ class DataChangeUI(object):
             i += 1
 
     def delete_subscription(self, subscription_id):
-        for k,v in self._subs_dc.items():
-            if v[1] == subscription_id:
-                node = self.get_node(k)
-                if node is not None:
-                    self._unsubscribe(node = node)
+        try:
+            for k,v in self._subs_dc.items():
+                if v[1] == subscription_id:
+                    node = self.get_node(k)
+                    if node is not None:
+                        self._unsubscribe(node = node)
 
-        sub = self._datachange_sub[subscription_id].delete()
-        self._datachange_sub.pop(subscription_id)
-        i = 0
-        while self.model.item(i):
-            item = self.model.item(i)
-            if item.data().subscription_id == subscription_id:
-                self.model.removeRow(i)
-            i += 1
+            sub = self._datachange_sub[subscription_id].delete()
+            self._datachange_sub.pop(subscription_id)
+            i = 0
+            while self.model.item(i):
+                item = self.model.item(i)
+                if item.data().subscription_id == subscription_id:
+                    self.model.removeRow(i)
+                i += 1
+        except Exception as ex:
+            self.window.ui.logTextEdit.append(str(ex))
     
     def get_node(self,node_id):
         for node in self._subscribed_nodes:
@@ -316,6 +318,10 @@ class ClientController:
                 self.ui.logTextEdit.append("Disconnecting from server")
                 self._connected = False
             if self.client:
+                if self.datachange_ui._datachange_sub:
+                    sub_ids = list(self.datachange_ui._datachange_sub.keys())
+                    for sub_id in sub_ids:
+                        self.datachange_ui.delete_subscription(sub_id)
                 self.client.disconnect()
                 self._reset()
         except Exception as ex:
