@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'monitored_item.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.3
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(371, 433)
+        Dialog.resize(371, 450)
         Dialog.setStyleSheet("QDialog {\n"
 "    background-color: white;\n"
 "}")
@@ -111,6 +111,20 @@ class Ui_Dialog(object):
 "}")
         self.deadbandValue.setObjectName("deadbandValue")
         self.verticalLayout.addWidget(self.deadbandValue)
+        self.label_5 = QtWidgets.QLabel(Dialog)
+        font = QtGui.QFont()
+        font.setFamily("Ubuntu Mono")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_5.setFont(font)
+        self.label_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_5.setObjectName("label_5")
+        self.verticalLayout.addWidget(self.label_5)
+        self.monitoringMode = QtWidgets.QComboBox(Dialog)
+        self.monitoringMode.setStyleSheet("border: 2px solid black;")
+        self.monitoringMode.setObjectName("monitoringMode")
+        self.verticalLayout.addWidget(self.monitoringMode)
         spacerItem3 = QtWidgets.QSpacerItem(20, 15, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout.addItem(spacerItem3)
         self.discardOldestBox = QtWidgets.QCheckBox(Dialog)
@@ -151,5 +165,6 @@ class Ui_Dialog(object):
         self.absDeadbandBox.setText(_translate("Dialog", "Absolute DeadBand"))
         self.percentageDeadbandBox.setText(_translate("Dialog", "Relative DeadBand"))
         self.label_2.setText(_translate("Dialog", "DeadBand Value"))
+        self.label_5.setText(_translate("Dialog", "Monitoring Mode"))
         self.discardOldestBox.setText(_translate("Dialog", "Discard Oldest"))
         self.subscribeButton.setText(_translate("Dialog", "Subscribe"))

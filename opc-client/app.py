@@ -16,6 +16,7 @@ from uawidgets.refs_widget import RefsWidget
 
 from opcua import Client, crypto, ua, Node
 from opcua.tools import endpoint_to_strings
+from opcua.common.subscription import Subscription
 
 import sys
 from datetime import datetime
@@ -51,8 +52,14 @@ class DataChangeUI(object):
         self.window.ui.monItemView.horizontalHeader().setSectionResizeMode(1)
         
         self.pub_interval = 500
+        self.lifetime_count = 10000
+        self.max_keep_alive_count = 3000
+        self.max_notifications_per_publish = 10000
+        self.priority = 0
+
         self.subscription_id = None
         self.sampling_interval = 500
+        self.monitoring_mode = ua.MonitoringMode.Reporting
         self.queue_size = 1
         self.deadband_value = 0
         self.discard_oldest = True
@@ -96,7 +103,15 @@ class DataChangeUI(object):
     def create_subscription(self):
         try:
             #if not self._datachange_sub:
-            sub = self.window.client.create_subscription(self.pub_interval, self._subhandler)
+            params = ua.CreateSubscriptionParameters()
+            params.RequestedPublishingInterval = self.pub_interval
+            params.RequestedLifetimeCount = self.lifetime_count
+            params.RequestedMaxKeepAliveCount = self.max_keep_alive_count
+            params.MaxNotificationsPerPublish = self.max_notifications_per_publish
+            params.PublishingEnabled = True
+            params.Priority = self.priority
+            sub = Subscription(self.window.client.uaclient, params, self._subhandler)
+
             self._datachange_sub[sub.subscription_id] = sub
             self.model.setHorizontalHeaderLabels(["Subscription Id", "Publishing Interval"])
             row = [QStandardItem(str(sub.subscription_id)), QStandardItem(str(sub.parameters.RequestedPublishingInterval))]
@@ -129,6 +144,8 @@ class DataChangeUI(object):
             mir = self._datachange_sub[self.subscription_id]._make_monitored_item_request(node,ua.AttributeIds.Value, None, self.queue_size) #mfilter, queue size
             mir.RequestedParameters.DiscardOldest = self.discard_oldest
             mir.RequestedParameters.SamplingInterval= self.sampling_interval
+            mir.MonitoringMode = self.monitoring_mode
+            print(mir.MonitoringMode)
             mod_filter = ua.DataChangeFilter()
             mod_filter.Trigger = ua.DataChangeTrigger(1)  # send notification when status or value change
             if self.deadband_type != None:
@@ -217,7 +234,7 @@ class ClientController:
         self.ui = view
         self.client = None
         self._connected = False
-        self.address_list = ["opc.tcp://localhost:4840"]
+        self.address_list = ["opc.tcp://10.42.0.2:4840/OPCUAproject"]
         self.security_mode = None
         self.security_policy = None
         self.certificate_path = None
