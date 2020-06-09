@@ -100,6 +100,8 @@ class DataChangeUI(object):
         self.model.clear()
         self.monitored_item_model.clear()
 
+    
+
     def create_subscription(self):
         try:
             #if not self._datachange_sub:
@@ -155,14 +157,21 @@ class DataChangeUI(object):
                         mod_filter.DeadbandValue =  self.deadband_value
                     else:
                         self.window.ui.logTextEdit.append("filter must be used for numeric data type")
-                elif self.deadband_type == 2 and node.get_type_definition().Identifier == ua.object_ids.ObjectIds.AnalogItemType:
-                    if node.get_data_type_as_variant_type() in self.numeric_types:           
-                        mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
-                        mod_filter.DeadbandValue =  self.deadband_value
+                elif self.deadband_type == 2:
+                    properties = node.get_properties()
+                    EURange = False
+                    for p in properties:
+                        browse_name = p.get_browse_name().Name
+                        if browse_name == "EURange":
+                            EURange = True
+                    if node.get_type_definition().Identifier == ua.object_ids.ObjectIds.AnalogItemType and EURange == True:
+                        if node.get_data_type_as_variant_type() in self.numeric_types:           
+                            mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
+                            mod_filter.DeadbandValue =  self.deadband_value
+                        else:
+                            self.window.ui.logTextEdit.append("filter must be used for numeric data type")
                     else:
-                        self.window.ui.logTextEdit.append("filter must be used for numeric data type")
-                else:
-                    self.window.ui.logTextEdit.append("percentage deadband must be applied to AnalagoItemType with EUrange")
+                        self.window.ui.logTextEdit.append("percentage deadband must be applied to AnalagoItemType with EUrange")
 
             mir.RequestedParameters.Filter = mod_filter
             handle = self._datachange_sub[self.subscription_id].create_monitored_items([mir]) 
