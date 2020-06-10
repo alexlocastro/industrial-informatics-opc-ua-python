@@ -67,7 +67,18 @@ class ConnectionDialog(QDialog):
                 self.ui.endpointsTable.setItem(rowPosition , 3, QTableWidgetItem(self.transport_profile_uri))
                 
                 if self.supported_endpoint not in self.transport_profile_uri:
-                    #row not selectable
+                    item = QTableWidgetItem(self.endpoint_url)
+                    item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
+                    self.ui.endpointsTable.setItem(rowPosition , 0, item)
+                    item = QTableWidgetItem(self.mode)
+                    item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
+                    self.ui.endpointsTable.setItem(rowPosition , 1, item)
+                    item = QTableWidgetItem(self.policy)
+                    item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
+                    self.ui.endpointsTable.setItem(rowPosition , 2, item)
+                    item = QTableWidgetItem(self.transport_profile_uri)
+                    item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
+                    self.ui.endpointsTable.setItem(rowPosition , 3, item)
                     
         except Exception as ex:
             self.uaclient.log_window.ui.logTextEdit.append(str(ex))
