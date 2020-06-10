@@ -10,11 +10,14 @@ class ConnectionDialog(QDialog):
         QDialog.__init__(self)
         self.ui = Ui_ConnectionDialog()
         self.ui.setupUi(self)
-        self.ui.endpointsTable.setRowCount(0)
-        self.ui.endpointsTable.setColumnCount(4)
-        self.ui.endpointsTable.setHorizontalHeaderLabels(["EndpointUrl","SecurityMode","SecurityPolicy","TransportProfileUri"])
-        self.ui.endpointsTable.horizontalHeader().setSectionResizeMode(0)
-        self.ui.endpointsTable.horizontalHeader().setStretchLastSection(True)
+        self.ui.selectableEndpointsTable.setRowCount(0)
+        self.ui.selectableEndpointsTable.setColumnCount(4)
+        self.ui.selectableEndpointsTable.setHorizontalHeaderLabels(["EndpointUrl","SecurityMode","SecurityPolicy","TransportProfileUri"])
+        self.ui.selectableEndpointsTable.horizontalHeader().setSectionResizeMode(0)
+        self.ui.selectableEndpointsTable.horizontalHeader().setStretchLastSection(True)
+        self.ui.unselectableEndpointsTable.setHorizontalHeaderLabels(["EndpointUrl","SecurityMode","SecurityPolicy","TransportProfileUri"])
+        self.ui.unselectableEndpointsTable.horizontalHeader().setSectionResizeMode(0)
+        self.ui.unselectableEndpointsTable.horizontalHeader().setStretchLastSection(True)
         self.uaclient = parent
         self.uri = uri
         self.supported_endpoint = "uatcp-uasc-uabinary"
@@ -58,40 +61,36 @@ class ConnectionDialog(QDialog):
                 self.mode = edp.SecurityMode.name
                 self.policy = edp.SecurityPolicyUri.split("#")[1]
                 self.transport_profile_uri = edp.TransportProfileUri
-                rowPosition = self.ui.endpointsTable.rowCount()
-                self.ui.endpointsTable.insertRow(rowPosition)
+                if self.supported_endpoint in self.transport_profile_uri:
+                    rowPosition = self.ui.selectableEndpointsTable.rowCount()
+                    self.ui.selectableEndpointsTable.insertRow(rowPosition)
+                    self.ui.selectableEndpointsTable.setItem(rowPosition , 0, QTableWidgetItem(self.endpoint_url))
+                    self.ui.selectableEndpointsTable.setItem(rowPosition , 1, QTableWidgetItem(self.mode))
+                    self.ui.selectableEndpointsTable.setItem(rowPosition , 2, QTableWidgetItem(self.policy))
+                    self.ui.selectableEndpointsTable.setItem(rowPosition , 3, QTableWidgetItem(self.transport_profile_uri))
+                else:
+                    rowPosition = self.ui.unselectableEndpointsTable.rowCount()
+                    self.ui.unselectableEndpointsTable.insertRow(rowPosition)
+                    self.ui.unselectableEndpointsTable.setItem(rowPosition , 0, QTableWidgetItem(self.endpoint_url))
+                    self.ui.unselectableEndpointsTable.setItem(rowPosition , 1, QTableWidgetItem(self.mode))
+                    self.ui.unselectableEndpointsTable.setItem(rowPosition , 2, QTableWidgetItem(self.policy))
+                    self.ui.unselectableEndpointsTable.setItem(rowPosition , 3, QTableWidgetItem(self.transport_profile_uri))
+
                 
-                self.ui.endpointsTable.setItem(rowPosition , 0, QTableWidgetItem(self.endpoint_url))
-                self.ui.endpointsTable.setItem(rowPosition , 1, QTableWidgetItem(self.mode))
-                self.ui.endpointsTable.setItem(rowPosition , 2, QTableWidgetItem(self.policy))
-                self.ui.endpointsTable.setItem(rowPosition , 3, QTableWidgetItem(self.transport_profile_uri))
-                
-                if self.supported_endpoint not in self.transport_profile_uri:
-                    item = QTableWidgetItem(self.endpoint_url)
-                    item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
-                    self.ui.endpointsTable.setItem(rowPosition , 0, item)
-                    item = QTableWidgetItem(self.mode)
-                    item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
-                    self.ui.endpointsTable.setItem(rowPosition , 1, item)
-                    item = QTableWidgetItem(self.policy)
-                    item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
-                    self.ui.endpointsTable.setItem(rowPosition , 2, item)
-                    item = QTableWidgetItem(self.transport_profile_uri)
-                    item.setFlags(Qt.ItemIsSelectable |  Qt.ItemIsEnabled)
-                    self.ui.endpointsTable.setItem(rowPosition , 3, item)
+
                     
         except Exception as ex:
             self.uaclient.log_window.ui.logTextEdit.append(str(ex))
     
     def close(self):
-        row = self.ui.endpointsTable.currentRow()
+        row = self.ui.selectableEndpointsTable.currentRow()
         if row > -1:
-            security_mode = self.ui.endpointsTable.item(row,1).text()
+            security_mode = self.ui.selectableEndpointsTable.item(row,1).text()
             if security_mode ==  "None":
                 self.uaclient.security_mode = None
             else:
                 self.uaclient.security_mode = security_mode
-            security_policy = self.ui.endpointsTable.item(row,2).text()
+            security_policy = self.ui.selectableEndpointsTable.item(row,2).text()
             if security_policy == "None":
                 self.uaclient.security_policy = None
             else:
