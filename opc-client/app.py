@@ -19,6 +19,7 @@ from uawidgets.refs_widget import RefsWidget
 
 from opcua import Client, crypto, ua, Node
 from opcua.tools import endpoint_to_strings
+from opcua.common.subscription import Subscription
 
 import sys
 from datetime import datetime
@@ -62,8 +63,14 @@ class DataChangeUI(object):
         self.sub_window.ui.monItemView.horizontalHeader().setSectionResizeMode(1)
         
         self.pub_interval = 500
+        self.lifetime_count = 10000
+        self.max_keep_alive_count = 3000
+        self.max_notifications_per_publish = 10000
+        self.priority = 0
+
         self.subscription_id = None
         self.sampling_interval = 500
+        self.monitoring_mode = ua.MonitoringMode.Reporting
         self.queue_size = 1
         self.deadband_value = 0
         self.discard_oldest = True
@@ -77,6 +84,15 @@ class DataChangeUI(object):
         # handle subscriptions
         self._subhandler.data_change_fired.connect(self._update_subscription_model, type=Qt.QueuedConnection)
         
+        self.numeric_types = [  ua.uatypes.VariantType.Int16,
+                                ua.uatypes.VariantType.UInt16,
+                                ua.uatypes.VariantType.Int32,
+                                ua.uatypes.VariantType.UInt32,
+                                ua.uatypes.VariantType.Int64,
+                                ua.uatypes.VariantType.UInt64,
+                                ua.uatypes.VariantType.Float,
+                                ua.uatypes.VariantType.Double
+                            ]
     
     def show_sub_dialog(self):
         dia = SubscriptionDialog(self)
@@ -95,10 +111,20 @@ class DataChangeUI(object):
         self.model.clear()
         self.monitored_item_model.clear()
 
+    
+
     def create_subscription(self):
         try:
             #if not self._datachange_sub:
-            sub = self.window.client.create_subscription(self.pub_interval, self._subhandler)
+            params = ua.CreateSubscriptionParameters()
+            params.RequestedPublishingInterval = self.pub_interval
+            params.RequestedLifetimeCount = self.lifetime_count
+            params.RequestedMaxKeepAliveCount = self.max_keep_alive_count
+            params.MaxNotificationsPerPublish = self.max_notifications_per_publish
+            params.PublishingEnabled = True
+            params.Priority = self.priority
+            sub = Subscription(self.window.client.uaclient, params, self._subhandler)
+
             self._datachange_sub[sub.subscription_id] = sub
             self.model.setHorizontalHeaderLabels(["Subscription Id", "Publishing Interval"])
             row = [QStandardItem(str(sub.subscription_id)), QStandardItem(str(sub.parameters.RequestedPublishingInterval))]
@@ -131,11 +157,33 @@ class DataChangeUI(object):
             mir = self._datachange_sub[self.subscription_id]._make_monitored_item_request(node,ua.AttributeIds.Value, None, self.queue_size) #mfilter, queue size
             mir.RequestedParameters.DiscardOldest = self.discard_oldest
             mir.RequestedParameters.SamplingInterval= self.sampling_interval
+            mir.MonitoringMode = self.monitoring_mode
+            print(mir.MonitoringMode)
             mod_filter = ua.DataChangeFilter()
             mod_filter.Trigger = ua.DataChangeTrigger(1)  # send notification when status or value change
             if self.deadband_type != None:
-                mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
-                mod_filter.DeadbandValue =  self.deadband_value
+                if self.deadband_type == 1:
+                    if node.get_data_type_as_variant_type() in self.numeric_types:           
+                        mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
+                        mod_filter.DeadbandValue =  self.deadband_value
+                    else:
+                        self.window.ui.logTextEdit.append("filter must be used for numeric data type")
+                elif self.deadband_type == 2:
+                    properties = node.get_properties()
+                    EURange = False
+                    for p in properties:
+                        browse_name = p.get_browse_name().Name
+                        if browse_name == "EURange":
+                            EURange = True
+                    if node.get_type_definition().Identifier == ua.object_ids.ObjectIds.AnalogItemType and EURange == True:
+                        if node.get_data_type_as_variant_type() in self.numeric_types:           
+                            mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
+                            mod_filter.DeadbandValue =  self.deadband_value
+                        else:
+                            self.window.ui.logTextEdit.append("filter must be used for numeric data type")
+                    else:
+                        self.window.ui.logTextEdit.append("percentage deadband must be applied to AnalagoItemType with EUrange")
+
             mir.RequestedParameters.Filter = mod_filter
             handle = self._datachange_sub[self.subscription_id].create_monitored_items([mir]) 
             self._subs_dc[node.nodeid] = (handle[0], self.subscription_id)
@@ -145,20 +193,23 @@ class DataChangeUI(object):
             self.monitored_item_model.takeRow(idx.row())
 
     def _unsubscribe(self, node=None):
-        if node is None:
-            node = self.window.get_current_node()
-        if node is None:
-            return
-        sub_id = self._subs_dc[node.nodeid][1]
-        handle = self._subs_dc[node.nodeid][0]
-        self._datachange_sub[sub_id].unsubscribe(handle)
-        self._subscribed_nodes.remove(node)
-        i = 0
-        while self.monitored_item_model.item(i):
-            item = self.monitored_item_model.item(i)
-            if item.data() == node:
-                self.monitored_item_model.removeRow(i)
-            i += 1
+        try:
+            if node is None:
+                node = self.window.get_current_node()
+            if node is None:
+                return
+            sub_id = self._subs_dc[node.nodeid][1]
+            handle = self._subs_dc[node.nodeid][0]
+            self._datachange_sub[sub_id].unsubscribe(handle)
+            self._subscribed_nodes.remove(node)
+            i = 0
+            while self.monitored_item_model.item(i):
+                item = self.monitored_item_model.item(i)
+                if item.data() == node:
+                    self.monitored_item_model.removeRow(i)
+                i += 1
+        except Exception as ex:
+            self.window.ui.logTextEdit.append(str(ex))
 
     def _update_subscription_model(self, node, value, timestamp):
         i = 0
@@ -172,20 +223,23 @@ class DataChangeUI(object):
             i += 1
 
     def delete_subscription(self, subscription_id):
-        for k,v in self._subs_dc.items():
-            if v[1] == subscription_id:
-                node = self.get_node(k)
-                if node is not None:
-                    self._unsubscribe(node = node)
+        try:
+            for k,v in self._subs_dc.items():
+                if v[1] == subscription_id:
+                    node = self.get_node(k)
+                    if node is not None:
+                        self._unsubscribe(node = node)
 
-        sub = self._datachange_sub[subscription_id].delete()
-        self._datachange_sub.pop(subscription_id)
-        i = 0
-        while self.model.item(i):
-            item = self.model.item(i)
-            if item.data().subscription_id == subscription_id:
-                self.model.removeRow(i)
-            i += 1
+            sub = self._datachange_sub[subscription_id].delete()
+            self._datachange_sub.pop(subscription_id)
+            i = 0
+            while self.model.item(i):
+                item = self.model.item(i)
+                if item.data().subscription_id == subscription_id:
+                    self.model.removeRow(i)
+                i += 1
+        except Exception as ex:
+            self.window.ui.logTextEdit.append(str(ex))
     
     def get_node(self,node_id):
         for node in self._subscribed_nodes:
@@ -200,7 +254,7 @@ class ClientController:
         self.ui = view
         self.client = None
         self._connected = False
-        self.address_list = ["opc.tcp://localhost:4840"]
+        self.address_list = ["opc.tcp://10.42.0.2:4840/OPCUAproject"]
         self.security_mode = None
         self.security_policy = None
         self.certificate_path = None
@@ -305,6 +359,10 @@ class ClientController:
                 self.log_window.ui.logTextEdit.append("Disconnecting from server")
                 self._connected = False
             if self.client:
+                if self.datachange_ui._datachange_sub:
+                    sub_ids = list(self.datachange_ui._datachange_sub.keys())
+                    for sub_id in sub_ids:
+                        self.datachange_ui.delete_subscription(sub_id)
                 self.client.disconnect()
                 self._reset()
         except Exception as ex:

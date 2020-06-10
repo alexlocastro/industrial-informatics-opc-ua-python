@@ -11,6 +11,7 @@ class MonitoredItemDialog(QDialog):
         self.datachange_ui = datachange_ui
         self.ui.queueSize.setText(str(self.datachange_ui.queue_size))
         self.ui.samplingInterval.setText(str(self.datachange_ui.sampling_interval))
+        self.ui.monitoringMode.addItems(["Reporting", "Disabled", "Sampling"])
         self.ui.deadbandValue.setText(str(self.datachange_ui.deadband_value))
         self.ui.discardOldestBox.setChecked(True)
         self.ui.deadbandValue.setDisabled(True) 
@@ -42,6 +43,13 @@ class MonitoredItemDialog(QDialog):
             sampling_interval = float(self.ui.samplingInterval.text())
             queue_size = int(self.ui.queueSize.text())
             deadband_value = float(self.ui.deadbandValue.text())
+            if self.ui.monitoringMode.currentText() == "Disabled":
+                monitoring_mode = ua.uaprotocol_auto.MonitoringMode.Disabled
+            elif self.ui.monitoringMode.currentText() == "Reporting":
+                monitoring_mode = ua.uaprotocol_auto.MonitoringMode.Reporting
+            elif self.ui.monitoringMode.currentText() == "Sampling":
+                monitoring_mode = ua.uaprotocol_auto.MonitoringMode.Sampling
+                
             if subscription_id in self.datachange_ui._datachange_sub.keys():
                 self.datachange_ui.subscription_id = subscription_id
                 if sampling_interval > 0 and queue_size >= 0 and deadband_value>=0:       
@@ -55,6 +63,7 @@ class MonitoredItemDialog(QDialog):
                     self.datachange_ui.sampling_interval = sampling_interval
                     self.datachange_ui.queue_size = queue_size   
                     self.datachange_ui.deadband_value = deadband_value
+                    self.datachange_ui.monitoring_mode = monitoring_mode
                     self.datachange_ui._subscribe()
                 else:
                     self.datachange_ui.window.log_window.ui.logTextEdit.append("Sampl. Interval must be greater than zero\nQueue size must be equal or greater than zero\nAbs Deadband must be equal or greater than zero")

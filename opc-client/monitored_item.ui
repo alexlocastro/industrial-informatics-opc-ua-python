@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>371</width>
-    <height>433</height>
+    <height>514</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -197,6 +197,31 @@
 	margin-left: 80px;
 	margin-right: 80px;
 }</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_5">
+     <property name="font">
+      <font>
+       <family>Ubuntu Mono</family>
+       <pointsize>13</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Monitoring Mode</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="monitoringMode">
+     <property name="styleSheet">
+      <string notr="true">border: 2px solid black;</string>
      </property>
     </widget>
    </item>
