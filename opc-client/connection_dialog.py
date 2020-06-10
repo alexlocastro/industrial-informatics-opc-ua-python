@@ -15,6 +15,8 @@ class ConnectionDialog(QDialog):
         self.ui.selectableEndpointsTable.setHorizontalHeaderLabels(["EndpointUrl","SecurityMode","SecurityPolicy","TransportProfileUri"])
         self.ui.selectableEndpointsTable.horizontalHeader().setSectionResizeMode(0)
         self.ui.selectableEndpointsTable.horizontalHeader().setStretchLastSection(True)
+        self.ui.unselectableEndpointsTable.setRowCount(0)
+        self.ui.unselectableEndpointsTable.setColumnCount(4)
         self.ui.unselectableEndpointsTable.setHorizontalHeaderLabels(["EndpointUrl","SecurityMode","SecurityPolicy","TransportProfileUri"])
         self.ui.unselectableEndpointsTable.horizontalHeader().setSectionResizeMode(0)
         self.ui.unselectableEndpointsTable.horizontalHeader().setStretchLastSection(True)
