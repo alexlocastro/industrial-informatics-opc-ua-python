@@ -21,9 +21,9 @@ class SubscriptionDialog(QDialog):
                 self.datachange_ui.pub_interval = pub_interval
                 self.datachange_ui.create_subscription()
             else:
-                self.datachange_ui.window.ui.logTextEdit.append("Pub. Interval must be greater than zero\nQueue size must be equal or greater than zero\nAbs Deadband must be equal or greater than zero")    
+                self.datachange_ui.window.log_window.ui.logTextEdit.append("Pub. Interval must be greater than zero\nQueue size must be equal or greater than zero\nAbs Deadband must be equal or greater than zero")    
         except Exception as ex:
-            self.datachange_ui.window.ui.logTextEdit.append(str(ex))
+            self.datachange_ui.window.log_window.ui.logTextEdit.append(str(ex))
         finally:
             self.accept()
 
@@ -38,9 +38,9 @@ class SubscriptionDialog(QDialog):
                 self.datachange_ui.abs_deadband = abs_deadband
                 self.datachange_ui._subscribe()
             else:
-                self.datachange_ui.window.ui.logTextEdit.append("Pub. Interval must be greater than zero\nQueue size must be equal or greater than zero\nAbs Deadband must be equal or greater than zero")    
+                self.datachange_ui.window.log_window.ui.logTextEdit.append("Pub. Interval must be greater than zero\nQueue size must be equal or greater than zero\nAbs Deadband must be equal or greater than zero")    
         except Exception as ex:
-            self.datachange_ui.window.ui.logTextEdit.append(str(ex))
+            self.datachange_ui.window.log_window.ui.logTextEdit.append(str(ex))
         finally:
             self.accept()'''
 

@@ -57,10 +57,10 @@ class MonitoredItemDialog(QDialog):
                     self.datachange_ui.deadband_value = deadband_value
                     self.datachange_ui._subscribe()
                 else:
-                    self.datachange_ui.window.ui.logTextEdit.append("Sampl. Interval must be greater than zero\nQueue size must be equal or greater than zero\nAbs Deadband must be equal or greater than zero")
+                    self.datachange_ui.window.log_window.ui.logTextEdit.append("Sampl. Interval must be greater than zero\nQueue size must be equal or greater than zero\nAbs Deadband must be equal or greater than zero")
             else:
-                self.datachange_ui.window.ui.logTextEdit.append("Subscription does not exists")             
+                self.datachange_ui.window.log_window.ui.logTextEdit.append("Subscription does not exists")             
         except Exception as ex:
-            self.datachange_ui.window.ui.logTextEdit.append(str(ex))
+            self.datachange_ui.window.log_window.ui.logTextEdit.append(str(ex))
         finally:
             self.accept()

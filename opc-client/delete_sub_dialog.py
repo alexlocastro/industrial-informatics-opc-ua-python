@@ -18,8 +18,8 @@ class DeleteSubDialog(QDialog):
             if sub_id in self.datachange_ui._datachange_sub.keys():
                 self.datachange_ui.delete_subscription(sub_id)
             else:
-                self.datachange_ui.window.ui.logTextEdit.append("Subscription does not exists")
+                self.datachange_ui.window.log_window.ui.logTextEdit.append("Subscription does not exists")
         except Exception as ex:
-            self.datachange_ui.window.ui.logTextEdit.append(str(ex))
+            self.datachange_ui.window.log_window.ui.logTextEdit.append(str(ex))
         finally:
             self.accept()

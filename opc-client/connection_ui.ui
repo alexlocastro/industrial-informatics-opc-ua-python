@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>461</width>
-    <height>300</height>
+    <width>735</width>
+    <height>524</height>
    </rect>
   </property>
   <property name="font">
@@ -29,7 +29,28 @@
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="0">
+   <item row="7" column="2">
+    <widget class="QPushButton" name="closeButton">
+     <property name="font">
+      <font>
+       <family>Ubuntu Mono</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: white;
+	border: 2px solid black;
+}</string>
+     </property>
+     <property name="text">
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
     <widget class="QLabel" name="certificateLabel">
      <property name="font">
       <font>
@@ -44,7 +65,43 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="2">
+   <item row="6" column="0">
+    <widget class="QLabel" name="privateKeyLabel">
+     <property name="font">
+      <font>
+       <family>Ubuntu Mono</family>
+       <pointsize>13</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>None</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" colspan="2">
+    <widget class="QPushButton" name="privateKeyButton">
+     <property name="font">
+      <font>
+       <family>Ubuntu Mono</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: white;
+	border: 2px solid black;
+}</string>
+     </property>
+     <property name="text">
+      <string>Select private key</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2">
     <widget class="QPushButton" name="certificateButton">
      <property name="font">
       <font>
@@ -62,51 +119,6 @@
      </property>
      <property name="text">
       <string>Select certificate</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QComboBox" name="policyComboBox">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border: 2px solid black;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="privateKeyLabel">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>13</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>None</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>13</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Security Policy</string>
      </property>
     </widget>
    </item>
@@ -131,75 +143,13 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="QComboBox" name="modeComboBox">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
+   <item row="1" column="0" colspan="3">
+    <widget class="QTableWidget" name="endpointsTable">
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
-     <property name="styleSheet">
-      <string notr="true">border: 2px solid black;</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>13</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Message Security Mode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="QPushButton" name="closeButton">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-	background-color: white;
-	border: 2px solid black;
-}</string>
-     </property>
-     <property name="text">
-      <string>Close</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" colspan="2">
-    <widget class="QPushButton" name="privateKeyButton">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-	background-color: white;
-	border: 2px solid black;
-}</string>
-     </property>
-     <property name="text">
-      <string>Select private key</string>
+     <property name="horizontalScrollMode">
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
     </widget>
    </item>

@@ -1,4 +1,7 @@
 from connection_dialog import ConnectionDialog
+from references import ReferencesWindow
+from subscription_w import SubscriptionWindow
+from log import LogWindow
 from subscription_dialog import SubscriptionDialog
 from monitored_item_dialog import MonitoredItemDialog
 from delete_sub_dialog import DeleteSubDialog
@@ -36,19 +39,27 @@ class DataChangeHandler(QObject):
 
 class DataChangeUI(object):
 
-    def __init__(self, window):
+    def __init__(self, window, sub_window):
         self.window = window
+        self.sub_window = sub_window
         self._subhandler = DataChangeHandler()
         self._subscribed_nodes = []
         #self._datachange_sub = None
         self._datachange_sub = {} #key: subscriptionId, value: subscription class
         self._subs_dc = {} #key: nodeId, value: (handler,subscriptionId)
-        self.model = QStandardItemModel()
+        '''self.model = QStandardItemModel()
         self.monitored_item_model = QStandardItemModel()
         self.window.ui.subView.setModel(self.model)
         self.window.ui.subView.horizontalHeader().setSectionResizeMode(1)
         self.window.ui.monItemView.setModel(self.monitored_item_model)
-        self.window.ui.monItemView.horizontalHeader().setSectionResizeMode(1)
+        self.window.ui.monItemView.horizontalHeader().setSectionResizeMode(1)'''
+    
+        self.model = QStandardItemModel()
+        self.monitored_item_model = QStandardItemModel()
+        self.sub_window.ui.subView.setModel(self.model)
+        self.sub_window.ui.subView.horizontalHeader().setSectionResizeMode(1)
+        self.sub_window.ui.monItemView.setModel(self.monitored_item_model)
+        self.sub_window.ui.monItemView.horizontalHeader().setSectionResizeMode(1)
         
         self.pub_interval = 500
         self.subscription_id = None
@@ -94,7 +105,7 @@ class DataChangeUI(object):
             row[0].setData(sub)
             self.model.appendRow(row)         
         except Exception as ex:
-            self.window.ui.logTextEdit.append(str(ex))
+            self.window.log_window.ui.logTextEdit.append(str(ex))
             raise
             #modelidx = self.model.indexFromItem(row[0])
             #self.model.takeRow(idx.row())
@@ -105,10 +116,10 @@ class DataChangeUI(object):
             if node is None:
                     return
         if node.get_node_class() != ua.NodeClass.Variable:
-            self.window.ui.logTextEdit.append("Select a variable node")
+            self.window.log_window.ui.logTextEdit.append("Select a variable node")
             return
         if node in self._subscribed_nodes:
-            self.window.ui.logTextEdit.append("already subscribed to node: %s " % node)
+            self.window.log_window.ui.logTextEdit.append("already subscribed to node: %s " % node)
             return
         self.monitored_item_model.setHorizontalHeaderLabels(["DisplayName", "Value", "Timestamp","Subscription Id"])
         text = str(node.get_display_name().Text)
@@ -129,7 +140,7 @@ class DataChangeUI(object):
             handle = self._datachange_sub[self.subscription_id].create_monitored_items([mir]) 
             self._subs_dc[node.nodeid] = (handle[0], self.subscription_id)
         except Exception as ex:
-            self.window.ui.logTextEdit.append(str(ex))
+            self.window.log_window.ui.logTextEdit.append(str(ex))
             idx = self.monitored_item_model.indexFromItem(row[0])
             self.monitored_item_model.takeRow(idx.row())
 
@@ -202,18 +213,24 @@ class ClientController:
 
         self.tree_ui = TreeWidget(self.ui.treeView)
         self.attrs_ui = AttrsWidget(self.ui.attrView)
-        self.refs_ui = RefsWidget(self.ui.refView)
-        self.datachange_ui = DataChangeUI(self)
+        #self.refs_ui = RefsWidget(self.ui.refView)
+        self.subscription_window = SubscriptionWindow()
+        self.log_window = LogWindow()
+        self.datachange_ui = DataChangeUI(self,self.subscription_window)
 
         self.ui.endpointsButton.clicked.connect(lambda : self.get_endpoints())
         self.ui.connSettingsButton.clicked.connect(lambda : self.show_connection_dialog())
         self.ui.connectButton.clicked.connect(lambda : self.connect())
         self.ui.disconnectButton.clicked.connect(lambda: self.disconnect())
         self.ui.treeView.selectionModel().selectionChanged.connect(lambda sel: self.show_attrs(sel))
-        self.ui.treeView.selectionModel().selectionChanged.connect(lambda sel: self.show_refs(sel))
+        #self.ui.treeView.selectionModel().selectionChanged.connect(lambda sel: self.show_refs(sel))
         self.ui.readButton.clicked.connect(lambda : self.read_value())
         self.ui.writeButton.clicked.connect(lambda : self.show_write_dialog())
+        self.ui.showReferencesButton.clicked.connect(lambda : self.show_refs_dialog())
+        self.ui.showSubscriptionsButton.clicked.connect(lambda : self.show_subs_dialog())
+        self.ui.showLogsButton.clicked.connect(lambda : self.show_logs_dialog())
     
+
     def closeEvent(self, event):
         self.disconnect()
 
@@ -222,40 +239,38 @@ class ClientController:
         client = Client(uri, timeout=2)
         edps = client.connect_and_get_server_endpoints()
         for i, ep in enumerate(edps, start=1):
-            self.ui.logTextEdit.append('Endpoint %s:' % i)
+            self.log_window.ui.logTextEdit.append('Endpoint %s:' % i)
             for (n, v) in endpoint_to_strings(ep):
-                self.ui.logTextEdit.append('  %s: %s' % (n, v))
-            self.ui.logTextEdit.append('')
+                self.log_window.ui.logTextEdit.append('  %s: %s' % (n, v))
+            self.log_window.ui.logTextEdit.append('')
         return edps
 
     def show_connection_dialog(self):
         dia = ConnectionDialog(self, self.ui.addressComboBox.currentText())
-        print(self.security_mode)
-        print(self.security_policy)
-        dia.security_mode = self.security_mode
-        dia.security_policy = self.security_policy
-        dia.certificate_path = self.certificate_path
-        dia.private_key_path = self.private_key_path
+        #dia.security_mode = self.security_mode
+        #dia.security_policy = self.security_policy
+        #dia.certificate_path = self.certificate_path
+        #dia.private_key_path = self.private_key_path
         ret = dia.exec_()
         if ret:
-            self.security_mode = dia.security_mode
-            self.security_policy = dia.security_policy
+            #self.security_mode = dia.security_mode
+            #self.security_policy = dia.security_policy
             self.certificate_path = dia.certificate_path
             self.private_key_path = dia.private_key_path
     
     def show_write_dialog(self):
         node = self.get_current_node()
         if node.get_node_class() == ua.NodeClass.Variable:
-            dia = WriteDialog(node,self.ui.logTextEdit)
+            dia = WriteDialog(node,self.log_window.ui.logTextEdit)
             ret = dia.exec_()
         else:
-            self.ui.logTextEdit.append("Only Variable can be written")
+            self.log_window.ui.logTextEdit.append("Only Variable can be written")
 
 
     def connect(self):
         self.disconnect()
         uri = self.ui.addressComboBox.currentText()
-        self.ui.logTextEdit.append("Connecting to %s with parameters %s, %s, %s, %s" % (uri, self.security_mode, self.security_policy, self.certificate_path, self.private_key_path))
+        self.log_window.ui.logTextEdit.append("Connecting to %s with parameters %s, %s, %s, %s" % (uri, self.security_mode, self.security_policy, self.certificate_path, self.private_key_path))
         try:
             self.client = Client(uri)
             self.client.application_uri = "urn:opcua:python:client"
@@ -269,7 +284,7 @@ class ClientController:
             self.client.connect()
             self._connected = True
         except Exception as ex:
-            self.ui.logTextEdit.append(str(ex))
+            self.log_window.ui.logTextEdit.append(str(ex))
         try:
             self.client.uaclient._uasocket._thread.isAlive()
             self.tree_ui.set_root_node(self.client.get_root_node())
@@ -287,16 +302,16 @@ class ClientController:
     def disconnect(self):
         try:
             if self._connected:
-                self.ui.logTextEdit.append("Disconnecting from server")
+                self.log_window.ui.logTextEdit.append("Disconnecting from server")
                 self._connected = False
             if self.client:
                 self.client.disconnect()
                 self._reset()
         except Exception as ex:
-            self.ui.logTextEdit.append(str(ex))
+            self.log_window.ui.logTextEdit.append(str(ex))
         finally:
             self.tree_ui.clear()
-            self.refs_ui.clear()
+            #self.refs_ui.clear()
             self.attrs_ui.clear()
             self.datachange_ui.clear()
 
@@ -309,14 +324,23 @@ class ClientController:
         if node:
             self.attrs_ui.show_attrs(node)
     
-    def show_refs(self, selection):
+    '''def show_refs(self, selection):
         if isinstance(selection, QItemSelection):
             if not selection.indexes(): # no selection
                 return
-
         node = self.get_current_node()
         if node:
-            self.refs_ui.show_refs(node)
+            self.refs_ui.show_refs(node)'''
+    
+    def show_refs_dialog(self):
+        self.references_window = ReferencesWindow(self)
+        self.references_window.show()
+
+    def show_subs_dialog(self):
+        self.subscription_window.show()
+    
+    def show_logs_dialog(self):
+        self.log_window.show()
     
     def get_current_node(self, idx=None):
         return self.tree_ui.get_current_node(idx)
@@ -328,9 +352,9 @@ class ClientController:
             if node.get_node_class() == ua.NodeClass.Variable:
                 value = node.get_value()
                 data = "Node: %s, Value: %s" % (node.get_browse_name(),value)
-                self.ui.logTextEdit.append(data)
+                self.log_window.ui.logTextEdit.append(data)
         except Exception as ex:
-            self.ui.logTextEdit.append(str(ex))
+            self.log_window.ui.logTextEdit.append(str(ex))
 
 
 class MainWindow(QMainWindow, Ui_mainWindow):

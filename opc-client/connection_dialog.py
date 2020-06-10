@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog, QFileDialog
+from PyQt5.QtWidgets import QDialog, QFileDialog,QTableWidgetItem
 
 from connection_ui import Ui_ConnectionDialog
 from uawidgets.utils import trycatchslot
@@ -9,27 +9,29 @@ class ConnectionDialog(QDialog):
         QDialog.__init__(self)
         self.ui = Ui_ConnectionDialog()
         self.ui.setupUi(self)
-
+        self.ui.endpointsTable.setRowCount(0)
+        self.ui.endpointsTable.setColumnCount(4)
+        self.ui.endpointsTable.setHorizontalHeaderLabels(["EndpointUrl","SecurityMode","SecurityPolicy","TransportProfileUri"])
+        self.ui.endpointsTable.horizontalHeader().setSectionResizeMode(0)
         self.uaclient = parent
         self.uri = uri
         
-        self.ui.modeComboBox.addItem("None")
+        '''self.ui.modeComboBox.addItem("None")
         self.ui.modeComboBox.addItem("Sign")
         self.ui.modeComboBox.addItem("SignAndEncrypt")
 
         self.ui.policyComboBox.addItem("None")
         self.ui.policyComboBox.addItem("Basic128Rsa15")
         self.ui.policyComboBox.addItem("Basic256")
-        self.ui.policyComboBox.addItem("Basic256Sha256")
+        self.ui.policyComboBox.addItem("Basic256Sha256")'''
 
 
-
-        self.ui.closeButton.clicked.connect(self.accept)
+        self.ui.closeButton.clicked.connect(lambda : self.close())
         self.ui.certificateButton.clicked.connect(self.get_certificate)
         self.ui.privateKeyButton.clicked.connect(self.get_private_key)
         self.ui.queryButton.clicked.connect(self.query)
 
-    @trycatchslot
+    '''@trycatchslot
     def query(self):
         self.ui.modeComboBox.clear()
         self.ui.policyComboBox.clear()
@@ -44,9 +46,39 @@ class ConnectionDialog(QDialog):
             policy = edp.SecurityPolicyUri.split("#")[1]
             if policy not in policies:
                 self.ui.policyComboBox.addItem(policy)
-                policies.append(policy)
+                policies.append(policy)'''
+    def query(self):
+        endpoints = self.uaclient.get_endpoints()
+        for edp in endpoints:
+            self.endpoint_url = edp.EndpointUrl
+            self.mode = edp.SecurityMode.name
+            self.policy = edp.SecurityPolicyUri.split("#")[1]
+            self.transport_profile_uri = edp.TransportProfileUri
+            rowPosition = self.ui.endpointsTable.rowCount()
+            self.ui.endpointsTable.insertRow(rowPosition)
+            self.ui.endpointsTable.setItem(rowPosition , 0, QTableWidgetItem(self.endpoint_url))
+            self.ui.endpointsTable.setItem(rowPosition , 1, QTableWidgetItem(self.mode))
+            self.ui.endpointsTable.setItem(rowPosition , 2, QTableWidgetItem(self.policy))
+            self.ui.endpointsTable.setItem(rowPosition , 3, QTableWidgetItem(self.transport_profile_uri))
+    
+    def close(self):
+        row = self.ui.endpointsTable.currentRow()
+        if row > -1:
+            security_mode = self.ui.endpointsTable.item(row,1).text()
+            if security_mode ==  "None":
+                self.uaclient.security_mode = None
+            else:
+                self.uaclient.security_mode = security_mode
+            security_policy = self.ui.endpointsTable.item(row,2).text()
+            if security_policy == "None":
+                self.uaclient.security_policy = None
+            else:
+                self.uaclient.security_policy = security_policy
+        
+        self.accept()
 
-    @property
+
+    '''@property
     def security_mode(self):
         text = self.ui.modeComboBox.currentText()
         if text == "None":
@@ -67,7 +99,7 @@ class ConnectionDialog(QDialog):
     @security_policy.setter
     def security_policy(self, value):
         self.ui.policyComboBox.setCurrentText(value)
-
+    '''
     @property
     def certificate_path(self):
         return self.ui.certificateLabel.text()
