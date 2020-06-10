@@ -289,14 +289,19 @@ class ClientController:
         self.disconnect()
 
     def get_endpoints(self):
+        
         uri = self.ui.addressComboBox.currentText() 
         client = Client(uri, timeout=2)
-        edps = client.connect_and_get_server_endpoints()
-        for i, ep in enumerate(edps, start=1):
-            self.log_window.ui.logTextEdit.append('Endpoint %s:' % i)
-            for (n, v) in endpoint_to_strings(ep):
-                self.log_window.ui.logTextEdit.append('  %s: %s' % (n, v))
-            self.log_window.ui.logTextEdit.append('')
+        try:
+            edps = client.connect_and_get_server_endpoints()
+            for i, ep in enumerate(edps, start=1):
+                self.log_window.ui.logTextEdit.append('Endpoint %s:' % i)
+                for (n, v) in endpoint_to_strings(ep):
+                    self.log_window.ui.logTextEdit.append('  %s: %s' % (n, v))
+                self.log_window.ui.logTextEdit.append('')
+        except Exception as ex:
+            self.log_window.ui.logTextEdit.append(str(ex))
+            raise
         return edps
 
     def show_connection_dialog(self):

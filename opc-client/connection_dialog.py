@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QFileDialog,QTableWidgetItem
+from PyQt5.QtCore import Qt
 
 from connection_ui import Ui_ConnectionDialog
 from uawidgets.utils import trycatchslot
@@ -13,8 +14,10 @@ class ConnectionDialog(QDialog):
         self.ui.endpointsTable.setColumnCount(4)
         self.ui.endpointsTable.setHorizontalHeaderLabels(["EndpointUrl","SecurityMode","SecurityPolicy","TransportProfileUri"])
         self.ui.endpointsTable.horizontalHeader().setSectionResizeMode(0)
+        self.ui.endpointsTable.horizontalHeader().setStretchLastSection(True)
         self.uaclient = parent
         self.uri = uri
+        self.supported_endpoint = "uatcp-uasc-uabinary"
         
         '''self.ui.modeComboBox.addItem("None")
         self.ui.modeComboBox.addItem("Sign")
@@ -48,18 +51,26 @@ class ConnectionDialog(QDialog):
                 self.ui.policyComboBox.addItem(policy)
                 policies.append(policy)'''
     def query(self):
-        endpoints = self.uaclient.get_endpoints()
-        for edp in endpoints:
-            self.endpoint_url = edp.EndpointUrl
-            self.mode = edp.SecurityMode.name
-            self.policy = edp.SecurityPolicyUri.split("#")[1]
-            self.transport_profile_uri = edp.TransportProfileUri
-            rowPosition = self.ui.endpointsTable.rowCount()
-            self.ui.endpointsTable.insertRow(rowPosition)
-            self.ui.endpointsTable.setItem(rowPosition , 0, QTableWidgetItem(self.endpoint_url))
-            self.ui.endpointsTable.setItem(rowPosition , 1, QTableWidgetItem(self.mode))
-            self.ui.endpointsTable.setItem(rowPosition , 2, QTableWidgetItem(self.policy))
-            self.ui.endpointsTable.setItem(rowPosition , 3, QTableWidgetItem(self.transport_profile_uri))
+        try:
+            endpoints = self.uaclient.get_endpoints()
+            for edp in endpoints:
+                self.endpoint_url = edp.EndpointUrl
+                self.mode = edp.SecurityMode.name
+                self.policy = edp.SecurityPolicyUri.split("#")[1]
+                self.transport_profile_uri = edp.TransportProfileUri
+                rowPosition = self.ui.endpointsTable.rowCount()
+                self.ui.endpointsTable.insertRow(rowPosition)
+                
+                self.ui.endpointsTable.setItem(rowPosition , 0, QTableWidgetItem(self.endpoint_url))
+                self.ui.endpointsTable.setItem(rowPosition , 1, QTableWidgetItem(self.mode))
+                self.ui.endpointsTable.setItem(rowPosition , 2, QTableWidgetItem(self.policy))
+                self.ui.endpointsTable.setItem(rowPosition , 3, QTableWidgetItem(self.transport_profile_uri))
+                
+                if self.supported_endpoint not in self.transport_profile_uri:
+                    #row not selectable
+                    
+        except Exception as ex:
+            self.uaclient.log_window.ui.logTextEdit.append(str(ex))
     
     def close(self):
         row = self.ui.endpointsTable.currentRow()
