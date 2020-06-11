@@ -167,7 +167,7 @@ class DataChangeUI(object):
                         mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
                         mod_filter.DeadbandValue =  self.deadband_value
                     else:
-                        self.window.ui.logTextEdit.append("filter must be used for numeric data type")
+                        self.window.log_window.ui.logTextEdit.append("filter must be used for numeric data type")
                 elif self.deadband_type == 2:
                     properties = node.get_properties()
                     EURange = False
@@ -180,9 +180,9 @@ class DataChangeUI(object):
                             mod_filter.DeadbandType = self.deadband_type #1 assoluta , 2 percentage
                             mod_filter.DeadbandValue =  self.deadband_value
                         else:
-                            self.window.ui.logTextEdit.append("filter must be used for numeric data type")
+                            self.window.log_window.ui.logTextEdit.append("filter must be used for numeric data type")
                     else:
-                        self.window.ui.logTextEdit.append("percentage deadband must be applied to AnalagoItemType with EUrange")
+                        self.window.log_window.ui.logTextEdit.append("percentage deadband must be applied to AnalagoItemType with EUrange")
 
             mir.RequestedParameters.Filter = mod_filter
             handle = self._datachange_sub[self.subscription_id].create_monitored_items([mir]) 
@@ -209,7 +209,7 @@ class DataChangeUI(object):
                     self.monitored_item_model.removeRow(i)
                 i += 1
         except Exception as ex:
-            self.window.ui.logTextEdit.append(str(ex))
+            self.window.log_window.ui.logTextEdit.append(str(ex))
 
     def _update_subscription_model(self, node, value, timestamp):
         i = 0
@@ -239,7 +239,7 @@ class DataChangeUI(object):
                     self.model.removeRow(i)
                 i += 1
         except Exception as ex:
-            self.window.ui.logTextEdit.append(str(ex))
+            self.window.log_window.ui.logTextEdit.append(str(ex))
     
     def get_node(self,node_id):
         for node in self._subscribed_nodes:
