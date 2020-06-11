@@ -76,10 +76,10 @@ class DataChangeUI(object):
         self.discard_oldest = True
         self.deadband_type = None
         
-        self.window.ui.createSubButton.clicked.connect(lambda: self.show_sub_dialog())
-        self.window.ui.subDataChangeButton.clicked.connect(lambda: self.show_monitored_item_dialog())
-        self.window.ui.unsubDataChangeButton.clicked.connect(lambda: self._unsubscribe())
-        self.window.ui.deleteSubButton.clicked.connect(lambda: self.show_delete_sub_dialog())
+        self.window.ui.actionCreate_subscription.triggered.connect(lambda: self.show_sub_dialog())
+        self.window.ui.actionCreate_monitored_item.triggered.connect(lambda: self.show_monitored_item_dialog())
+        self.window.ui.actionDelete_monitered_item.triggered.connect(lambda: self._unsubscribe())
+        self.window.ui.actionDelete_subscription.triggered.connect(lambda: self.show_delete_sub_dialog())
 
         # handle subscriptions
         self._subhandler.data_change_fired.connect(self._update_subscription_model, type=Qt.QueuedConnection)
@@ -272,19 +272,28 @@ class ClientController:
         self.log_window = LogWindow()
         self.datachange_ui = DataChangeUI(self,self.subscription_window)
 
-        self.ui.endpointsButton.clicked.connect(lambda : self.get_endpoints())
-        self.ui.connSettingsButton.clicked.connect(lambda : self.show_connection_dialog())
-        self.ui.connectButton.clicked.connect(lambda : self.connect())
-        self.ui.disconnectButton.clicked.connect(lambda: self.disconnect())
-        self.ui.treeView.selectionModel().selectionChanged.connect(lambda sel: self.show_attrs(sel))
         #self.ui.treeView.selectionModel().selectionChanged.connect(lambda sel: self.show_refs(sel))
-        self.ui.readButton.clicked.connect(lambda : self.read_value())
-        self.ui.writeButton.clicked.connect(lambda : self.show_write_dialog())
-        self.ui.showReferencesButton.clicked.connect(lambda : self.show_refs_dialog())
-        self.ui.showSubscriptionsButton.clicked.connect(lambda : self.show_subs_dialog())
-        self.ui.showLogsButton.clicked.connect(lambda : self.show_logs_dialog())
-    
+        self.ui.treeView.selectionModel().selectionChanged.connect(lambda sel: self.show_attrs(sel))
 
+        # self.ui.endpointsButton.clicked.connect(lambda : self.get_endpoints())
+        # self.ui.connSettingsButton.clicked.connect(lambda : self.show_connection_dialog())
+        # self.ui.connectButton.clicked.connect(lambda : self.connect())
+        # self.ui.disconnectButton.clicked.connect(lambda: self.disconnect())
+        # self.ui.readButton.clicked.connect(lambda : self.read_value())
+        # self.ui.writeButton.clicked.connect(lambda : self.show_write_dialog())
+        # self.ui.showReferencesButton.clicked.connect(lambda : self.show_refs_dialog())
+        # self.ui.showSubscriptionsButton.clicked.connect(lambda : self.show_subs_dialog())
+        # self.ui.showLogsButton.clicked.connect(lambda : self.show_logs_dialog())
+    
+        self.ui.actionQuery_endpoints.triggered.connect(lambda : self.get_endpoints())
+        self.ui.actionConnection_settings.triggered.connect(lambda : self.show_connection_dialog())
+        self.ui.actionConnect.triggered.connect(lambda : self.connect())
+        self.ui.actionDisconnect.triggered.connect(lambda: self.disconnect())
+        self.ui.actionRead.triggered.connect(lambda : self.read_value())
+        self.ui.actionWrite.triggered.connect(lambda : self.show_write_dialog())
+        self.ui.actionReferences.triggered.connect(lambda : self.show_refs_dialog())
+        self.ui.actionSubscriptions.triggered.connect(lambda : self.show_subs_dialog())
+        self.ui.actionLogs.triggered.connect(lambda : self.show_logs_dialog())
     def closeEvent(self, event):
         self.disconnect()
 

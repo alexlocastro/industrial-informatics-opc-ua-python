@@ -97,6 +97,9 @@ class ConnectionDialog(QDialog):
                 self.uaclient.security_policy = None
             else:
                 self.uaclient.security_policy = security_policy
+        else:
+            self.uaclient.security_mode = None
+            self.uaclient.security_policy = security_policy
         
         self.accept()
 

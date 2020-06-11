@@ -29,7 +29,49 @@
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="6" column="0">
+   <item row="9" column="2">
+    <widget class="QPushButton" name="closeButton">
+     <property name="font">
+      <font>
+       <family>Ubuntu Mono</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: white;
+	border: 2px solid black;
+}</string>
+     </property>
+     <property name="text">
+      <string>Done</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1" colspan="2">
+    <widget class="QPushButton" name="privateKeyButton">
+     <property name="font">
+      <font>
+       <family>Ubuntu Mono</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	background-color: white;
+	border: 2px solid black;
+}</string>
+     </property>
+     <property name="text">
+      <string>Select private key</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
     <widget class="QLabel" name="certificateLabel">
      <property name="font">
       <font>
@@ -41,6 +83,26 @@
      </property>
      <property name="text">
       <string>None</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QTableWidget" name="selectableEndpointsTable">
+     <property name="styleSheet">
+      <string notr="true">border: 2px solid black;
+</string>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="horizontalScrollMode">
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
     </widget>
    </item>
@@ -65,44 +127,22 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QTableWidget" name="selectableEndpointsTable">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-     <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
-     </property>
-     <property name="horizontalScrollMode">
-      <enum>QAbstractItemView::ScrollPerPixel</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="2">
-    <widget class="QPushButton" name="closeButton">
+   <item row="8" column="0">
+    <widget class="QLabel" name="privateKeyLabel">
      <property name="font">
       <font>
        <family>Ubuntu Mono</family>
-       <pointsize>12</pointsize>
+       <pointsize>13</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-	background-color: white;
-	border: 2px solid black;
-}</string>
-     </property>
      <property name="text">
-      <string>Close</string>
+      <string>None</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="1" colspan="2">
+   <item row="7" column="1" colspan="2">
     <widget class="QPushButton" name="certificateButton">
      <property name="font">
       <font>
@@ -123,29 +163,8 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1" colspan="2">
-    <widget class="QPushButton" name="privateKeyButton">
-     <property name="font">
-      <font>
-       <family>Ubuntu Mono</family>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-	background-color: white;
-	border: 2px solid black;
-}</string>
-     </property>
-     <property name="text">
-      <string>Select private key</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="privateKeyLabel">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
      <property name="font">
       <font>
        <family>Ubuntu Mono</family>
@@ -155,12 +174,31 @@
       </font>
      </property>
      <property name="text">
-      <string>None</string>
+      <string>Available endpoints</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="3">
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <family>Ubuntu Mono</family>
+       <pointsize>13</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Unavailable endpoints</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="3">
     <widget class="QTableWidget" name="unselectableEndpointsTable">
+     <property name="styleSheet">
+      <string notr="true">border: 2px solid black;
+</string>
+     </property>
      <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
