@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'connection_ui.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.12.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -149,5 +149,5 @@ class Ui_ConnectionDialog(object):
         self.queryButton.setText(_translate("ConnectionDialog", "Query server capability"))
         self.privateKeyLabel.setText(_translate("ConnectionDialog", "None"))
         self.certificateButton.setText(_translate("ConnectionDialog", "Select certificate"))
-        self.label.setText(_translate("ConnectionDialog", "Available endpoints"))
-        self.label_2.setText(_translate("ConnectionDialog", "Unavailable endpoints"))
+        self.label.setText(_translate("ConnectionDialog", "Supported endpoints"))
+        self.label_2.setText(_translate("ConnectionDialog", "Unsupported endpoints"))

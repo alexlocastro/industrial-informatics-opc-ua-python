@@ -174,7 +174,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Available endpoints</string>
+      <string>Supported endpoints</string>
      </property>
     </widget>
    </item>
@@ -189,7 +189,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Unavailable endpoints</string>
+      <string>Unsupported endpoints</string>
      </property>
     </widget>
    </item>
